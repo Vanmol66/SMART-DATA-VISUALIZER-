@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="hero">
+    <h1>Data Visualizer</h1>
+    <p>Analyze datasets instantly with AI-powered insights</p>
+</div>
+
+<div class="card-container">
+
+    <!-- Upload -->
+    <div class="glass-card" style="width:300px;">
+        <h4>Upload Dataset</h4>
+        <p>Select CSV/XLSX file</p>
+
+        <form method="post" enctype="multipart/form-data">
+            <input type="file" name="file" class="input-modern mb-3">
+            <button class="btn-modern">Analyze</button>
+        </form>
+    </div>
+
+    <!-- History Quick -->
+    <div class="glass-card" style="width:300px;">
+        <h4>View History</h4>
+        <p>See previously analyzed datasets</p>
+
+        <a href="/profile" class="btn-modern">Open Profile</a>
+    </div>
+
+</div>
+
+{% endblock %}

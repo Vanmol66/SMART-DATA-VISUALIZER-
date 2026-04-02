@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+
+<body class="theme-dark">
+
+<nav class="navbar px-4 py-3">
+    <span>Visualizer</span>
+
+    <div style="float:right;">
+        <a href="/home">Home</a>
+        <a href="/profile">Profile</a>
+        <a href="/logout">Logout</a>
+
+        <select onchange="setTheme(this.value)">
+            <option value="theme-dark">Dark</option>
+            <option value="theme-ocean">Ocean</option>
+            <option value="theme-light">Light</option>
+        </select>
+    </div>
+</nav>
+
+<div class="container">
+{% block content %}{% endblock %}
+</div>
+
+<script>
+function setTheme(t){
+    document.body.className = t;
+}
+</script>
+
+</body>
+</html>

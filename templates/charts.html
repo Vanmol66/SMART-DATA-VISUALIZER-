@@ -1,0 +1,111 @@
+{# backend/templates/charts.html #}
+{% extends "base.html" %}
+{% block content %}
+<h2>Charts & Recommendations: {{ filename }}</h2>
+
+<hr>
+
+<!-- Manual Chart Builder (moved to top) -->
+<h4 class="mt-3">Manual Chart Builder</h4>
+<form method="post" class="row g-2 mb-4">
+  <div class="col-md-3">
+    <label class="form-label">Chart type</label>
+    <select class="form-select" name="chart_type" required>
+      <option value="bar">Bar</option>
+      <option value="pie">Pie</option>
+      <option value="line">Line</option>
+      <option value="scatter">Scatter</option>
+      <option value="histogram">Histogram</option>
+      <option value="box">Box</option>
+      <option value="heatmap">Heatmap</option>
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">X column (if applicable)</label>
+    <select class="form-select" name="xcol">
+      <option value="">— none —</option>
+      {% for c in columns %}
+      <option value="{{ c }}">{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3">
+    <label class="form-label">Y column (if applicable)</label>
+    <select class="form-select" name="ycol">
+      <option value="">— none —</option>
+      {% for c in numeric_columns %}
+      <option value="{{ c }}">{{ c }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3 align-self-end">
+    <button class="btn btn-success" type="submit">Generate Chart</button>
+  </div>
+</form>
+
+
+
+<hr>
+
+<h4 class="mt-4">Recommended visualizations</h4>
+<div class="row">
+  {% for s in profile.suggestions[:12] %}
+    <div class="col-md-6 mb-3">
+      <div class="card p-2">
+        <div class="card-body">
+          <h6>{{ s.suggested_chart | upper }} — {{ s.type }}</h6>
+          <p class="mb-1"><strong>Columns:</strong> {% if s.x %}{{ s.x }}{% endif %}{% if s.y %} , {{ s.y }}{% endif %}</p>
+          <p class="small text-muted">{{ s.reason }}</p>
+
+          <!-- Suitability progress bar -->
+          {% if s.score is defined %}
+          <div class="mb-2">
+            <div class="d-flex justify-content-between small mb-1">
+              <div>Suitability</div>
+              <div><strong>{{ s.score }}%</strong></div>
+            </div>
+            <div class="progress" style="height:10px;">
+              <div class="progress-bar" role="progressbar" style="width: {{ s.score }}%;" aria-valuenow="{{ s.score }}" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+            <div class="small text-muted mt-1">{{ s.explain_score }}</div>
+          </div>
+          {% endif %}
+
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('view_chart', filename=filename, chart_type=s.suggested_chart, xcol=s.x, ycol=s.y) }}">View full chart</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<h4 class="mt-4">Preview examples</h4>
+<div class="row">
+  {% for p in previews %}
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h6>{{ p.title }}</h6>
+          {% if p.suggestion.score is defined %}
+            <div class="small text-muted mb-2">Suitability: {{ p.suggestion.score }}% — {{ p.suggestion.explain_score }}</div>
+          {% endif %}
+          <div class="chart-preview">{{ p.div | safe }}</div>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<!-- What each chart focuses on (moved below manual builder) -->
+<h4 class="mt-3">What each chart focuses on</h4>
+<ul>
+  <li><strong>Bar:</strong> Compare aggregated quantities across categories (totals or means).</li>
+  <li><strong>Pie:</strong> Percentage share for small-cardinality categorical variables.</li>
+  <li><strong>Line:</strong> Trends over time (time-series).</li>
+  <li><strong>Scatter:</strong> Relationship between two numeric variables (correlation).</li>
+  <li><strong>Histogram:</strong> Distribution of a single numeric variable.</li>
+  <li><strong>Box:</strong> Distribution and outliers for numeric data, optionally by category.</li>
+  <li><strong>Heatmap:</strong> Correlation matrix between numeric variables.</li>
+</ul>
+<div class="mt-3">
+  <a class="btn btn-outline-secondary" href="{{ url_for('analysis', filename=filename) }}">Back to Analysis</a>
+</div>
+{% endblock %}

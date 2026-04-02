@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{{ title }}</h3>
+<div class="mb-3">
+  <a class="btn btn-secondary btn-sm" href="{{ url_for('charts', filename=filename) }}">Back to Charts</a>
+  <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('analysis', filename=filename) }}">View Analysis</a>
+</div>
+<div>
+  {{ chart_div | safe }}
+</div>
+{% endblock %}

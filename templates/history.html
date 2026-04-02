@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="mb-4">Your History</h2>
+
+<div class="row">
+{% for item in data %}
+    <div class="col-md-4 mb-3">
+        <div class="glass">
+            <h6>{{ item.filename }}</h6>
+            <p>{{ item.chart_type }}</p>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}

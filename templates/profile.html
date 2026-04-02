@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="glass-card text-center" style="max-width:600px;margin:auto;">
+
+    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" class="avatar mb-3">
+
+    <h3>{{ user.name }}</h3>
+    <p>{{ user.email }}</p>
+
+    <a href="/edit-avatar" class="btn-modern mb-3">Change Avatar</a>
+
+    <hr>
+
+    <h4>Your Datasets</h4>
+
+    {% for item in history %}
+        <div class="glass-card mt-2">
+            <b>{{ item.filename }}</b>
+            <p>{{ item.chart_type }}</p>
+
+            <a href="/analysis/{{ item.filename }}" class="btn-modern">Open</a>
+        </div>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4">Upload dataset (CSV or XLSX)</h1>
+
+<form method="post" enctype="multipart/form-data">
+  <div class="mb-3">
+    <input class="form-control" type="file" name="file" accept=".csv,.xlsx" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Upload & Analyze</button>
+</form>
+
+<hr>
+<h5>Example dataset</h5>
+<p>Try the included sample dataset (copy sample into uploads/ then use Upload page or download and re-upload):</p>
+<a href="{{ url_for('uploaded_file', filename='sample_sales.csv') }}" class="btn btn-outline-secondary">Download sample_sales.csv</a>
+{% endblock %}
