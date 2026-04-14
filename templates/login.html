@@ -1,16 +1,142 @@
-{% extends "base.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
 
-<div class="glass text-center mx-auto" style="max-width:400px;">
-    <h2>Login</h2>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
 
-    <a href="/login/google?remember=true" class="btn btn-primary w-100 mb-3">
-        Login with Google
-    </a>
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    <a href="/login/guest" class="btn btn-outline-light w-100">
-        Continue as Guest
-    </a>
+  background: linear-gradient(135deg, #c2b6ff, #f3c6ff, #b6d0ff);
+}
+
+/* Glass Card */
+.login-card {
+  width: 360px;
+  padding: 35px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(15px);
+
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+  text-align: center;
+}
+
+/* Icon */
+.icon {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 15px;
+
+  border-radius: 12px;
+  background: linear-gradient(135deg, #6a5cff, #8b7cff);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  color: white;
+}
+
+/* Title */
+h2 {
+  color: #5b4bff;
+  margin-bottom: 5px;
+}
+
+p {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* Buttons */
+.btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Google */
+.google-btn {
+  background: white;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border: 1px solid #ddd;
+}
+
+.google-btn:hover {
+  background: #f5f5f5;
+}
+
+/* Guest */
+.guest-btn {
+  background: linear-gradient(135deg, #6a5cff, #8b7cff);
+  color: white;
+}
+
+.guest-btn:hover {
+  opacity: 0.9;
+}
+
+/* Footer */
+.footer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #666;
+}
+</style>
+
+</head>
+<body>
+
+<div class="login-card">
+
+  <div class="icon">⚡</div>
+
+  <h2>DataForge</h2>
+  <p>Analyze data smarter & faster</p>
+
+  <!-- GOOGLE LOGIN -->
+  <a href="/login/google" style="text-decoration:none;">
+    <button class="btn google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
+      Continue with Google
+    </button>
+  </a>
+
+  <!-- GUEST LOGIN -->
+  <a href="/login/guest" style="text-decoration:none;">
+    <button class="btn guest-btn">
+      Continue as Guest
+    </button>
+  </a>
+
+  <div class="footer">
+    Secure • Fast • No data stored
+  </div>
+
 </div>
 
-{% endblock %}
+</body>
+</html>

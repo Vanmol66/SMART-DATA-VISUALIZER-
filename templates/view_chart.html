@@ -1,11 +1,24 @@
 {% extends "base.html" %}
 {% block content %}
-<h3>{{ title }}</h3>
-<div class="mb-3">
-  <a class="btn btn-secondary btn-sm" href="{{ url_for('charts', filename=filename) }}">Back to Charts</a>
-  <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('analysis', filename=filename) }}">View Analysis</a>
+
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/home">Home</a><span>›</span>
+    <a href="{{ url_for('charts', filename=filename) }}">{{ filename }}</a><span>›</span>
+    <span>Chart</span>
+  </div>
+  <h2>{{ title }}</h2>
 </div>
-<div>
-  {{ chart_div | safe }}
+
+<div style="display:flex;gap:0.65rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+  <a class="btn btn-ghost btn-sm" href="{{ url_for('charts', filename=filename) }}">← Charts</a>
+  <a class="btn btn-ghost btn-sm" href="{{ url_for('analysis', filename=filename) }}">Analysis</a>
 </div>
+
+<div class="glass-card anim">
+  <div class="card-body p-lg">
+    <div class="chart-preview">{{ chart_div | safe }}</div>
+  </div>
+</div>
+
 {% endblock %}

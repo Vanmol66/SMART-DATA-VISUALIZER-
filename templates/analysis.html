@@ -1,48 +1,98 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Analysis: {{ filename }}</h2>
-<p>Rows: {{ profile.n_rows }}, Columns: {{ profile.n_cols }}</p>
+<h2>🧹 Data Cleanliness</h2>
 
-<h4 class="mt-4">Column-level details</h4>
+<p>{{ cleaning.category }} — {{ cleaning.score }}%</p>
+
+<div class="progress">
+  <div class="progress-bar" style="width:{{ cleaning.score }}%"></div>
+</div>
+<h4>Column Issues</h4>
+<ul>
+{% for c in cleaning.column_issues %}
+<li>{{ c }}</li>
+{% endfor %}
+</ul>
+
+<p><b>Outliers:</b> {{ cleaning.outliers }}</p>
+<h4>Suggestions</h4>
+<ul>
+{% for s in cleaning.suggestions %}
+<li>{{ s }}</li>
+{% endfor %}
+</ul>
+
+<h2>⚡ DAX Recommendations</h2>
+
+{% for d in dax %}
+<div style="margin-bottom:10px;">
+  <b>{{ d.title }}</b><br>
+  <code>{{ d.formula }}</code>
+  <p>{{ d.use }}</p>
+</div>
+{% endfor %}
+
+  <p>
+    <span class="badge">{{ profile.n_rows }} rows</span>&nbsp;
+    <span class="badge">{{ profile.n_cols }} columns</span>&nbsp;
+    <span style="color:var(--t3);font-size:0.8rem;">— {{ filename }}</span>
+  </p>
+</div>
+
+<!-- Column Details -->
+<div class="sec">Column-level Details</div>
 <div class="row">
   {% for col in profile.columns %}
-    <div class="col-md-4 mb-3">
-      <div class="card h-100">
-        <div class="card-body">
-          <h6 class="card-title">{{ col.name }}</h6>
-          <p class="mb-1"><strong>Detected type:</strong> {{ col.type }} ({{ col.dtype }})</p>
-          <p class="mb-1"><strong>Unique:</strong> {{ col.n_unique }}, <strong>Missing:</strong> {{ col.n_missing }}</p>
-          <p class="mb-1"><strong>Sample:</strong> {{ col.sample_values | join(', ') }}</p>
-          {% if col.mean is defined %}
-            <p class="mb-1"><strong>Mean:</strong> {{ col.mean }}, <strong>Median:</strong> {{ col.median }}</p>
-            <p class="mb-1"><strong>Mode:</strong> {{ col.mode }} ({{ col.mode_count }})</p>
-            <p class="mb-1"><strong>Std:</strong> {{ col.std }}</p>
-          {% else %}
-            <p class="mb-1"><strong>Mode:</strong> {{ col.mode }} ({{ col.mode_count }})</p>
-          {% endif %}
+  <div class="col-md-4 mb-3">
+    <div class="card h-100 anim" style="animation-delay:{{ loop.index0 * 0.04 }}s">
+      <div class="card-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.65rem;">
+          <h6 style="margin:0;">{{ col.name }}</h6>
+          <span class="badge">{{ col.type }}</span>
         </div>
+        <div class="data-row"><span class="lbl">dtype</span><span class="val mono">{{ col.dtype }}</span></div>
+        <div class="data-row"><span class="lbl">Unique</span><span class="val">{{ col.n_unique }}</span></div>
+        <div class="data-row"><span class="lbl">Missing</span>
+          <span class="val {% if col.n_missing > 0 %}warn{% else %}ok{% endif %}">{{ col.n_missing }}</span>
+        </div>
+        {% if col.mean is defined %}
+        <div class="data-row"><span class="lbl">Mean</span><span class="val mono">{{ col.mean }}</span></div>
+        <div class="data-row"><span class="lbl">Median</span><span class="val mono">{{ col.median }}</span></div>
+        <div class="data-row"><span class="lbl">Std dev</span><span class="val mono">{{ col.std }}</span></div>
+        <div class="data-row"><span class="lbl">Mode</span>
+          <span class="val mono">{{ col.mode }}<span style="color:var(--t3);font-size:0.72rem;"> ({{ col.mode_count }})</span></span>
+        </div>
+        {% else %}
+        <div class="data-row"><span class="lbl">Mode</span>
+          <span class="val">{{ col.mode }}<span style="color:var(--t3);font-size:0.72rem;"> ({{ col.mode_count }})</span></span>
+        </div>
+        {% endif %}
+        {% if col.sample_values %}
+        <div style="margin-top:0.55rem;padding-top:0.5rem;border-top:1px solid var(--border);">
+          <span style="font-size:0.66rem;color:var(--t3);text-transform:uppercase;letter-spacing:0.08em;font-weight:700;">Sample</span>
+          <p style="font-size:0.76rem;color:var(--t2);margin-top:0.22rem;word-break:break-word;">{{ col.sample_values | join(', ') }}</p>
+        </div>
+        {% endif %}
       </div>
     </div>
+  </div>
   {% endfor %}
 </div>
 
+<!-- Numeric Summary -->
 {% if numeric_summary %}
-<h4 class="mt-4">Numeric summary (describe)</h4>
+<div class="sec mt-4">Numeric Summary (describe)</div>
 <div class="table-responsive">
   <table class="table table-sm table-bordered">
-    <thead>
-      <tr>
-        <th>Stat</th>
-        {% for col in numeric_summary.keys() %}<th>{{ col }}</th>{% endfor %}
-      </tr>
-    </thead>
+    <thead><tr>
+      <th>Stat</th>
+      {% for col in numeric_summary.keys() %}<th>{{ col }}</th>{% endfor %}
+    </tr></thead>
     <tbody>
       {% for stat, values in numeric_summary.items() %}
       <tr>
-        <td>{{ stat }}</td>
-        {% for col, v in values.items() %}
-        <td>{{ v }}</td>
-        {% endfor %}
+        <td><strong>{{ stat }}</strong></td>
+        {% for col, v in values.items() %}<td>{{ v }}</td>{% endfor %}
       </tr>
       {% endfor %}
     </tbody>
@@ -51,13 +101,41 @@
 {% endif %}
 
 {% if correlation %}
-<h4 class="mt-4">Correlation (numeric)</h4>
-<p>Use the Charts page to view the correlation heatmap visually.</p>
-<div class="small text-muted mb-3">Correlation matrix available for numeric columns.</div>
+<div class="glass-card mt-4" style="border-left:3px solid var(--a1);">
+  <div class="card-body">
+    <h5 style="margin-bottom:0.4rem;">📈 Correlation Matrix Available</h5>
+    <p style="margin-bottom:0.85rem;">Numeric columns have been correlated. View a visual heatmap in Charts.</p>
+    <a class="btn-outline-primary btn-sm" href="{{ url_for('charts', filename=filename) }}">View heatmap →</a>
+  </div>
+</div>
 {% endif %}
 
-<div class="mt-4">
-  <a class="btn btn-primary" href="{{ url_for('charts', filename=filename) }}">Go to Charts & Recommendations</a>
-  <a class="btn btn-outline-secondary" href="{{ url_for('uploaded_file', filename=filename) }}">Download dataset</a>
+<div class="mt-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+  <a class="btn btn-primary" href="{{ url_for('charts', filename=filename) }}">Charts &amp; Recommendations →</a>
+  <a class="btn btn-ghost" href="{{ url_for('uploaded_file', filename=filename) }}">⬇ Download Dataset</a>
 </div>
+
+{% if is_guest %}
+<div id="guestPopup" class="popup-overlay">
+  <div class="popup-box">
+    <h3>⚠️ Guest Mode</h3>
+    <p>No history will be saved for guest users.</p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+</div>
+{% endif %}
+
+<script>
+function closePopup() {
+  document.getElementById("guestPopup").style.display = "none";
+}
+
+window.onload = function () {
+  const popup = document.getElementById("guestPopup");
+  if (popup) {
+    popup.style.display = "flex";
+  }
+};
+</script>
+
 {% endblock %}

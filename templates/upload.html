@@ -1,16 +1,161 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 class="mb-4">Upload dataset (CSV or XLSX)</h1>
 
-<form method="post" enctype="multipart/form-data">
-  <div class="mb-3">
-    <input class="form-control" type="file" name="file" accept=".csv,.xlsx" required>
+<div class="page-header">
+  <div class="breadcrumb">
+    <a href="/home">Home</a><span>›</span><span>Upload</span>
   </div>
-  <button class="btn btn-primary" type="submit">Upload & Analyze</button>
-</form>
+  <h2>Upload Dataset</h2>
+  <p>Drag & drop or click to select a CSV or XLSX file</p>
+</div>
 
-<hr>
-<h5>Example dataset</h5>
-<p>Try the included sample dataset (copy sample into uploads/ then use Upload page or download and re-upload):</p>
-<a href="{{ url_for('uploaded_file', filename='sample_sales.csv') }}" class="btn btn-outline-secondary">Download sample_sales.csv</a>
+<div style="max-width:660px;margin:0 auto;">
+
+  <!-- ✅ FORM START -->
+
+  <form method="POST" action="/upload" enctype="multipart/form-data" id="upForm">
+
+```
+<!-- ✅ DROP ZONE -->
+<div class="upload-zone" id="dropZone">
+
+  <span class="upload-icon">📁</span>
+  <h4>Drop your file here</h4>
+  <p>Supports CSV & Excel (.xlsx)</p>
+
+  <!-- ✅ FILE INPUT -->
+  <input type="file"
+         id="fileInput"
+         name="file"
+         accept=".csv,.xlsx"
+         required
+         style="display:none;">
+
+  <!-- ✅ CLICK AREA -->
+  <div id="fileLbl" style="cursor:pointer;">
+    Click to select file
+  </div>
+
+  <!-- ✅ BUTTON -->
+  <button type="submit"
+          class="btn btn-primary btn-lg"
+          id="submitBtn"
+          disabled>
+    Analyze →
+  </button>
+
+</div>
+```
+
+  </form>
+  <!-- ✅ FORM END -->
+
+  <hr>
+
+  <!-- SAMPLE -->
+
+  <div class="glass-card anim">
+    <div class="card-body p-lg">
+      <h5 style="margin-bottom:0.65rem;">📦 Sample Dataset</h5>
+      <p style="margin-bottom:1rem;">
+        No data handy? Try our sample sales CSV.
+      </p>
+      <a href="{{ url_for('uploaded_file', filename='sample_sales.csv') }}"
+         class="btn btn-muted btn-sm">
+        ⬇ Download sample_sales.csv
+      </a>
+    </div>
+  </div>
+
+  <!-- INFO -->
+
+  <div class="glass-card anim a2" style="margin-top:1.1rem;">
+    <div class="card-body p-lg">
+      <h5 style="margin-bottom:0.75rem;">ℹ️ What happens next?</h5>
+      <div class="data-row">
+        <span class="lbl">Column profiling</span>
+        <span class="val ok">✓ Automatic</span>
+      </div>
+      <div class="data-row">
+        <span class="lbl">Statistical summary</span>
+        <span class="val ok">✓ Automatic</span>
+      </div>
+      <div class="data-row">
+        <span class="lbl">Chart recommendations</span>
+        <span class="val ok">✓ AI-scored</span>
+      </div>
+      <div class="data-row">
+        <span class="lbl">Correlation matrix</span>
+        <span class="val ok">✓ Automatic</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+
+// ✅ CLICK TO OPEN FILE
+document.getElementById("fileLbl").addEventListener("click", function() {
+  document.getElementById("fileInput").click();
+});
+
+// ✅ FILE SELECT
+document.getElementById("fileInput").addEventListener("change", function() {
+  const f = this.files[0];
+  if (f) {
+    document.getElementById("fileLbl").textContent =
+      "✓ " + f.name + " (" + (f.size/1024).toFixed(1) + " KB)";
+    document.getElementById("fileLbl").style.color = "var(--a3)";
+    document.getElementById("submitBtn").disabled = false;
+  }
+});
+
+// ✅ DRAG & DROP
+const zone = document.getElementById("dropZone");
+
+zone.addEventListener("dragover", e => {
+  e.preventDefault();
+  zone.style.borderColor = "var(--a1)";
+});
+
+zone.addEventListener("dragleave", () => {
+  zone.style.borderColor = "";
+});
+
+zone.addEventListener("drop", e => {
+  e.preventDefault();
+  zone.style.borderColor = "";
+
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById("fileInput");
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+
+    input.dispatchEvent(new Event("change"));
+  }
+});
+
+</script>
+<script>
+document.getElementById("upForm").addEventListener("submit", function(e) {
+
+  const isGuest = "{{ 'guest_id' in session }}";
+
+  if (isGuest === "True") {
+    const confirmUpload = confirm(
+      "⚠️ You are using Guest Mode.\n\n" +
+      "No history of this dataset will be saved.\n\n" +
+      "Do you want to continue?"
+    );
+
+    if (!confirmUpload) {
+      e.preventDefault();
+    }
+  }
+});
+</script>
+
 {% endblock %}

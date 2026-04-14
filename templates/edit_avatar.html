@@ -1,14 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h3>Select Avatar</h3>
+<div class="page-header">
+  <div class="breadcrumb"><a href="/profile">Profile</a><span>›</span><span>Avatar</span></div>
+  <h2>Choose Avatar</h2>
+  <p>Select a new profile picture — click to apply instantly</p>
+</div>
 
-<div class="card-container">
-    <a href="/set-avatar/avatar1.png"><img src="/static/avatars/avatar1.avif" class="avatar"></a>
-    <a href="/set-avatar/avatar2.png"><img src="/static/avatars/avatar2.jpg" class="avatar"></a>
-    <a href="/set-avatar/avatar3.png"><img src="/static/avatars/avatar3.jpg" class="avatar"></a>
-    <a href="/set-avatar/avatar4.png"><img src="/static/avatars/avatar4.png" class="avatar"></a>
-    <a href="/set-avatar/avatar4.png"><img src="/static/avatars/avatar5.webp" class="avatar"></a>
+<div style="max-width:680px;margin:0 auto;">
+  <div class="avatar-grid">
+    <a href="/set-avatar/avatar1.png" class="avatar-item">
+      <img src="/static/avatars/avatar1.avif" alt="Avatar 1" onerror="this.src='/static/avatars/avatar1.png'">
+      <span class="av-name">Void</span>
+    </a>
+    <a href="/set-avatar/avatar2.png" class="avatar-item">
+      <img src="/static/avatars/avatar2.jpg" alt="Avatar 2" onerror="this.src='/static/avatars/avatar2.png'">
+      <span class="av-name">Aurora</span>
+    </a>
+    <a href="/set-avatar/avatar3.png" class="avatar-item">
+      <img src="/static/avatars/avatar3.jpg" alt="Avatar 3" onerror="this.src='/static/avatars/avatar3.png'">
+      <span class="av-name">Forest</span>
+    </a>
+    <a href="/set-avatar/avatar4.png" class="avatar-item">
+      <img src="/static/avatars/avatar4.png" alt="Avatar 4">
+      <span class="av-name">Inferno</span>
+    </a>
+    <a href="/set-avatar/avatar5.png" class="avatar-item">
+      <img src="/static/avatars/avatar5.webp" alt="Avatar 5" onerror="this.src='/static/avatars/avatar5.png'">
+      <span class="av-name">Polar</span>
+    </a>
+  </div>
+  <div style="text-align:center;margin-top:1.5rem;">
+    <a href="/profile" class="btn btn-ghost">← Back to Profile</a>
+  </div>
 </div>
 
 {% endblock %}

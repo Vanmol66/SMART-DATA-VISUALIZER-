@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="page-header">
+  <h2>🧹 Data Quality & DAX Insights</h2>
+  <p>{{ filename }}</p>
+</div>
+
+<!-- CLEANING SCORE -->
+<div class="glass-card">
+  <div class="card-body">
+    <h4>Cleanliness Score: {{ cleaning.score }}%</h4>
+    <p>{{ cleaning.category }}</p>
+
+    <div class="progress">
+      <div class="progress-bar" style="width:{{ cleaning.score }}%"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ISSUES -->
+<div class="glass-card mt-3">
+  <div class="card-body">
+    <h4>Issues</h4>
+    <ul>
+      {% for i in cleaning.issues %}
+      <li>{{ i }}</li>
+      {% endfor %}
+    </ul>
+
+    <h4>Column Issues</h4>
+    <ul>
+      {% for c in cleaning.column_issues %}
+      <li>{{ c }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<!-- DAX -->
+<div class="glass-card mt-3">
+  <div class="card-body">
+    <h4>DAX Recommendations</h4>
+
+    {% for d in dax %}
+    <div style="margin-bottom:15px;">
+      <b>{{ d.title }}</b>
+      <code>{{ d.formula }}</code>
+      <p>{{ d.use }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- NAVIGATION -->
+<div style="margin-top:20px;">
+  <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">
+    → Go to Analysis
+  </a>
+</div>
+
+{% endblock %}

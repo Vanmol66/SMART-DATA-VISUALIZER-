@@ -1,19 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Dataset: {{ filename }}</h2>
-<p>Rows: {{ profile.n_rows }}, Columns: {{ profile.n_cols }}</p>
 
-<h4 class="mt-4">Column summary</h4>
+<div class="page-header">
+  <div class="breadcrumb"><a href="/home">Home</a><span>›</span><span>Dataset</span></div>
+  <h2>{{ filename }}</h2>
+  <p>
+    <span class="badge">{{ profile.n_rows }} rows</span>&nbsp;
+    <span class="badge">{{ profile.n_cols }} columns</span>
+  </p>
+</div>
+
+<!-- Column Summary -->
+<div class="sec">Column Summary</div>
 <div class="row">
   {% for col in profile.columns %}
   <div class="col-md-4 mb-3">
-    <div class="card">
+    <div class="card h-100 anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
       <div class="card-body">
-        <h6 class="card-title">{{ col.name }}</h6>
-        <p class="mb-1"><strong>Type:</strong> {{ col.type }} ({{ col.dtype }})</p>
-        <p class="mb-1"><strong>Unique:</strong> {{ col.n_unique }}, <strong>Missing:</strong> {{ col.n_missing }}</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.65rem;">
+          <h6 style="margin:0;">{{ col.name }}</h6>
+          <span class="badge">{{ col.type }}</span>
+        </div>
+        <div class="data-row"><span class="lbl">dtype</span><span class="val mono">{{ col.dtype }}</span></div>
+        <div class="data-row"><span class="lbl">Unique</span><span class="val">{{ col.n_unique }}</span></div>
+        <div class="data-row"><span class="lbl">Missing</span>
+          <span class="val {% if col.n_missing > 0 %}warn{% else %}ok{% endif %}">{{ col.n_missing }}</span>
+        </div>
         {% if col.mean is defined %}
-          <p class="mb-1"><strong>Mean:</strong> {{ col.mean }}, <strong>Median:</strong> {{ col.median }}</p>
+        <div class="data-row"><span class="lbl">Mean</span><span class="val mono">{{ col.mean }}</span></div>
+        <div class="data-row"><span class="lbl">Median</span><span class="val mono">{{ col.median }}</span></div>
         {% endif %}
       </div>
     </div>
@@ -21,34 +36,45 @@
   {% endfor %}
 </div>
 
-<h4 class="mt-4">Suggested visualizations</h4>
+<!-- Suggested Visualizations -->
+<div class="sec mt-4">Suggested Visualizations</div>
 <div class="row">
   {% for s in profile.suggestions[:12] %}
-    <div class="col-md-6 mb-3">
-      <div class="card p-2">
-        <div class="card-body">
-          <h6>{{ s.suggested_chart | upper }}: {{ s.type }}</h6>
-          <p class="mb-2"><strong>Columns:</strong> {% if s.x %}{{ s.x }}{% endif %} {% if s.y %} , {{ s.y }}{% endif %}</p>
-          <p class="small text-muted">{{ s.reason }}</p>
-          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('view_chart', filename=filename, chart_type=s.suggested_chart, xcol=s.x, ycol=s.y) }}">View chart</a>
+  <div class="col-md-6 mb-3">
+    <div class="card">
+      <div class="card-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+          <h6 style="margin:0;">{{ s.suggested_chart | upper }}</h6>
+          <span class="badge">{{ s.type }}</span>
         </div>
+        <p class="mb-2" style="font-size:0.8rem;"><strong>Cols:</strong>
+          {% if s.x %}{{ s.x }}{% endif %}{% if s.y %} · {{ s.y }}{% endif %}
+        </p>
+        <p class="small text-muted mb-3">{{ s.reason }}</p>
+        <a class="btn-outline-primary btn-sm" href="{{ url_for('view_chart', filename=filename, chart_type=s.suggested_chart, xcol=s.x, ycol=s.y) }}">View chart →</a>
       </div>
     </div>
+  </div>
   {% endfor %}
 </div>
 
-<h4 class="mt-4">Chart previews</h4>
+{% if charts %}
+<div class="sec mt-4">Chart Previews</div>
 <div class="row">
   {% for c in charts %}
-    <div class="col-md-6">
-      <div class="card mb-3">
-        <div class="card-body">
-          <h6>{{ c.title }}</h6>
-          <div class="chart-preview">{{ c.div | safe }}</div>
-        </div>
-      </div>
-    </div>
+  <div class="col-md-6 mb-3">
+    <div class="card"><div class="card-body">
+      <h6 style="margin-bottom:0.7rem;">{{ c.title }}</h6>
+      <div class="chart-preview">{{ c.div | safe }}</div>
+    </div></div>
+  </div>
   {% endfor %}
+</div>
+{% endif %}
+
+<div class="mt-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+  <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">Deep Analysis →</a>
+  <a class="btn btn-ghost" href="{{ url_for('charts', filename=filename) }}">Charts &amp; Recommendations</a>
 </div>
 
 {% endblock %}

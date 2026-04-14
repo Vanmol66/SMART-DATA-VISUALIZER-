@@ -1,32 +1,74 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="hero">
-    <h1>Data Visualizer</h1>
-    <p>Analyze datasets instantly with AI-powered insights</p>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-aura"></div>
+  <div class="hero-eyebrow">AI-Powered Analytics</div>
+  <h1>Transform data into<br><em>clear decisions</em></h1>
+  <p class="hero-sub">Upload any CSV or XLSX and get instant profiling, smart chart recommendations, and stunning interactive visualizations — in seconds.</p>
+  <div class="hero-cta">
+   <form method="POST" action="/upload" enctype="multipart/form-data" id="heroForm">
+  <label class="btn btn-primary btn-lg" style="cursor:pointer;">
+    📤 Upload & Analyze
+    <input type="file" name="file" accept=".csv,.xlsx"
+           style="display:none;"
+           onchange="document.getElementById('heroForm').submit()">
+  </label>
+</form>
+    <a href="/history" class="btn btn-ghost btn-lg">View History</a>
+  </div>
+</section>
+
+
+<!-- FEATURE GRID -->
+<div class="feature-grid">
+  <div class="glass-card anim a1">
+    <div class="card-body p-lg">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">🔍</div>
+      <h5 style="margin-bottom:0.45rem;">Deep Column Profiling</h5>
+      <p>Auto-detects types, computes mean, median, mode, std, and missing values per column.</p>
+    </div>
+  </div>
+  <div class="glass-card anim a2">
+    <div class="card-body p-lg">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">🤖</div>
+      <h5 style="margin-bottom:0.45rem;">AI Chart Recommendations</h5>
+      <p>Scored, ranked suggestions for the best chart type — with reasoning for every pick.</p>
+    </div>
+  </div>
+  <div class="glass-card anim a3">
+    <div class="card-body p-lg">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">🎨</div>
+      <h5 style="margin-bottom:0.45rem;">5 Live Themes</h5>
+      <p>Switch between Void, Aurora, Forest, Inferno, and Polar. Preference saved locally.</p>
+    </div>
+  </div>
+  <div class="glass-card anim a4">
+    <div class="card-body p-lg">
+      <div style="font-size:2rem;margin-bottom:0.75rem;">⚡</div>
+      <h5 style="margin-bottom:0.45rem;">Instant Results</h5>
+      <p>No config, no waiting. Drag, drop, and explore interactive charts immediately.</p>
+    </div>
+  </div>
 </div>
 
-<div class="card-container">
-
-    <!-- Upload -->
-    <div class="glass-card" style="width:300px;">
-        <h4>Upload Dataset</h4>
-        <p>Select CSV/XLSX file</p>
-
-        <form method="post" enctype="multipart/form-data">
-            <input type="file" name="file" class="input-modern mb-3">
-            <button class="btn-modern">Analyze</button>
-        </form>
-    </div>
-
-    <!-- History Quick -->
-    <div class="glass-card" style="width:300px;">
-        <h4>View History</h4>
-        <p>See previously analyzed datasets</p>
-
-        <a href="/profile" class="btn-modern">Open Profile</a>
-    </div>
-
+<div style="text-align:center;margin-top:3.5rem;color:var(--t3);font-size:0.78rem;letter-spacing:0.04em;">
+  Supports &nbsp;<span class="badge">CSV</span>&nbsp;<span class="badge">XLSX</span>&nbsp;
+  — No account needed to explore
 </div>
+
+<script>
+document.querySelector('input[type="file"]').addEventListener('change', function() {
+  const form = document.getElementById('heroForm');
+  const dt = new DataTransfer();
+  dt.items.add(this.files[0]);
+  const input = document.createElement('input');
+  input.type = 'file'; input.name = 'file'; input.style.display = 'none';
+  input.files = dt.files;
+  form.appendChild(input);
+  form.submit();
+});
+</script>
 
 {% endblock %}

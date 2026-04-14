@@ -1,34 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="glass mx-auto text-center" style="max-width:400px;">
+<div class="login-wrap">
+  <div class="login-card glass-card">
+    <div class="card-body">
+      <div style="text-align:center;margin-bottom:1.75rem;">
+        <img src="{{ url_for('static', filename='avatars/avatar1.png') }}"
+             class="avatar" alt="Preview" id="av" style="margin-bottom:1rem;">
+        <h3 style="margin-bottom:0.28rem;">Create Profile</h3>
+        <p>Personalize your DataForge experience</p>
+      </div>
 
-    <img src="{{ url_for('static', filename='avatars/avatar1.png') }}" class="avatar mb-3">
-
-    <h3>Create Profile</h3>
-
-    <form method="POST">
-
-        <select name="avatar" class="form-control mb-3">
-            <option value="avatar1.png">Avatar 1</option>
-            <option value="avatar2.png">Avatar 2</option>
-            <option value="avatar3.png">Avatar 3</option>
-            <option value="avatar4.png">Avatar 4</option>
-            <option value="avatar5.png">Avatar 5</option>
-        </select>
-
-        <input type="text" name="name" placeholder="Name" class="form-control mb-2">
-        <input type="number" name="age" placeholder="Age" class="form-control mb-2">
-
-        <select name="work" class="form-control mb-3">
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Avatar</label>
+          <select name="avatar" class="form-select" onchange="document.getElementById('av').src='/static/avatars/'+this.value">
+            <option value="avatar1.png">🌌 Void</option>
+            <option value="avatar2.png">🌸 Aurora</option>
+            <option value="avatar3.png">🌿 Forest</option>
+            <option value="avatar4.png">🔥 Inferno</option>
+            <option value="avatar5.png">❄️ Polar</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Display Name</label>
+          <input type="text" name="name" placeholder="Your name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Age</label>
+          <input type="number" name="age" placeholder="Your age" class="form-control" min="10" max="120">
+        </div>
+        <div class="mb-4">
+          <label class="form-label">Role</label>
+          <select name="work" class="form-select">
             <option>Student</option>
             <option>Corporate</option>
+            <option>Researcher</option>
             <option>Others</option>
-        </select>
-
-        <button class="btn btn-primary w-100">Create Profile</button>
-    </form>
-
+          </select>
+        </div>
+        <button class="btn btn-primary btn-w" type="submit">Create Profile →</button>
+      </form>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

@@ -108,6 +108,9 @@ def history():
 
 @auth_bp.route("/profile")
 def profile():
+    if "user_id" not in session:
+        return redirect("/login")
+
     user = User.query.get(session["user_id"])
 
     from models.history import History
@@ -135,15 +138,5 @@ def logout():
 def home():
     if "user_id" not in session and "guest_id" not in session:
         return redirect("/login")
-
-    if request.method == "POST":
-        file = request.files["file"]
-
-        if file:
-            filename = file.filename
-            filepath = "uploads/" + filename
-            file.save(filepath)
-
-            return redirect(f"/analysis/{filename}")
 
     return render_template("index.html")

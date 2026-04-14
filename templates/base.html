@@ -1,35 +1,141 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DataForge — Smart Visualizer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body class="theme-dark">
+<body class="theme-void">
 
-<nav class="navbar px-4 py-3">
-    <span>Visualizer</span>
+<!-- ══════════ NAVBAR ══════════ -->
+<nav class="navbar">
+  <a href="/home" class="nav-brand">
+    <div class="nav-logo">⚡</div>
+    <span class="nav-wordmark">DataForge</span>
+  </a>
 
-    <div style="float:right;">
-        <a href="/home">Home</a>
-        <a href="/profile">Profile</a>
-        <a href="/logout">Logout</a>
+  <!-- CENTER NAV -->
+  <div class="nav-center">
+    <a href="/home">Home</a>
 
-        <select onchange="setTheme(this.value)">
-            <option value="theme-dark">Dark</option>
-            <option value="theme-ocean">Ocean</option>
-            <option value="theme-light">Light</option>
-        </select>
+    {% if session.get('user_id') %}
+      <a href="/profile">Profile</a>
+      <a href="/history">History</a>
+    {% endif %}
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="nav-right">
+
+    <!-- THEME PICKER -->
+    <div class="theme-picker" title="Switch theme">
+      <button class="t-dot on" data-t="theme-void"></button>
+      <button class="t-dot" data-t="theme-aurora"></button>
+      <button class="t-dot" data-t="theme-forest"></button>
+      <button class="t-dot" data-t="theme-inferno"></button>
+      <button class="t-dot" data-t="theme-polar"></button>
     </div>
+
+    <!-- USER vs GUEST -->
+    {% if session.get('user_id') %}
+      <!-- Logged User -->
+      <a href="/profile">
+        <img src="{{ url_for('static', filename='avatars/avatar1.avif') }}"
+             class="nav-avatar-img" alt="Profile"
+             onerror="this.style.display='none'">
+      </a>
+
+      <a href="/logout" class="btn-nav">Sign out</a>
+
+    {% elif session.get('guest_id') %}
+      <!-- Guest Mode -->
+      <span class="guest-badge">Guest Mode</span>
+      <a href="/logout" class="btn-nav">Exit</a>
+    {% endif %}
+
+    <!-- MOBILE HAMBURGER -->
+    <button class="hamburger" id="ham">
+      <span></span><span></span><span></span>
+    </button>
+
+  </div>
 </nav>
 
-<div class="container">
-{% block content %}{% endblock %}
+<!-- ══════════ MOBILE DRAWER ══════════ -->
+<div class="nav-drawer" id="drawer">
+  <a href="/home">🏠 Home</a>
+
+  {% if session.get('user_id') %}
+    <a href="/profile">👤 Profile</a>
+    <a href="/history">🕒 History</a>
+  {% endif %}
+
+  <a href="/logout">🚪 Logout</a>
 </div>
 
+<!-- ══════════ GUEST WARNING BANNER ══════════ -->
+{% if session.get('guest_id') %}
+<div class="guest-banner">
+  ⚠️ You are using Guest Mode — history will NOT be saved
+</div>
+{% endif %}
+
+<!-- ══════════ CONTENT ══════════ -->
+<div class="page">
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<!-- ══════════ JS ══════════ -->
 <script>
-function setTheme(t){
-    document.body.className = t;
-}
+// ── Theme system ──
+const T_KEY = 'df_theme';
+const saved = localStorage.getItem(T_KEY) || 'theme-void';
+document.body.className = saved;
+
+document.querySelectorAll('.t-dot').forEach(btn => {
+  btn.classList.toggle('on', btn.dataset.t === saved);
+
+  btn.addEventListener('click', () => {
+    document.body.className = btn.dataset.t;
+    localStorage.setItem(T_KEY, btn.dataset.t);
+
+    document.querySelectorAll('.t-dot').forEach(x => x.classList.remove('on'));
+    btn.classList.add('on');
+  });
+});
+
+// ── Mobile menu ──
+const ham = document.getElementById('ham');
+const drawer = document.getElementById('drawer');
+
+ham.onclick = () => {
+  ham.classList.toggle('open');
+  drawer.classList.toggle('open');
+};
+
+document.addEventListener('click', e => {
+  if (!ham.contains(e.target) && !drawer.contains(e.target)) {
+    ham.classList.remove('open');
+    drawer.classList.remove('open');
+  }
+});
+
+// ── Active link highlight ──
+const path = window.location.pathname;
+
+document.querySelectorAll('.nav-center a').forEach(a => {
+  if (path.startsWith(a.getAttribute('href'))) {
+    a.classList.add('active');
+  }
+});
 </script>
 
 </body>

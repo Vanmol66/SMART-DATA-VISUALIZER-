@@ -1,28 +1,40 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="glass-card text-center" style="max-width:600px;margin:auto;">
+<div class="profile-shell">
+  <div class="glass-card" style="border-radius:var(--r-xl);">
 
-    <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" class="avatar mb-3">
+    <div class="profile-top">
+      <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" class="avatar" alt="{{ user.name }}">
+      <h3>{{ user.name }}</h3>
+      <p>{{ user.email }}</p>
+      <a href="/edit-avatar" class="btn btn-ghost btn-sm" style="margin-top:1rem;">Change Avatar</a>
+    </div>
 
-    <h3>{{ user.name }}</h3>
-    <p>{{ user.email }}</p>
+    <div class="profile-body">
+      <div class="sec">Your Datasets</div>
 
-    <a href="/edit-avatar" class="btn-modern mb-3">Change Avatar</a>
-
-    <hr>
-
-    <h4>Your Datasets</h4>
-
-    {% for item in history %}
-        <div class="glass-card mt-2">
-            <b>{{ item.filename }}</b>
+      {% if history %}
+        {% for item in history %}
+        <div class="history-item">
+          <div class="history-item-left">
+            <h6>{{ item.filename }}</h6>
             <p>{{ item.chart_type }}</p>
-
-            <a href="/analysis/{{ item.filename }}" class="btn-modern">Open</a>
+          </div>
+          <a href="{{ url_for('analysis', filename=item.filename) }}">Open →</a>
         </div>
-    {% endfor %}
+        {% endfor %}
+      {% else %}
+        <div style="text-align:center;padding:2.5rem 1rem;">
+          <div style="font-size:2.5rem;margin-bottom:0.65rem;">📂</div>
+          <h5 style="margin-bottom:0.4rem;">No datasets yet</h5>
+          <p style="margin-bottom:1.25rem;">Upload your first file to get started.</p>
+          <a href="/upload" class="btn btn-primary btn-sm">Upload Dataset</a>
+        </div>
+      {% endif %}
+    </div>
 
+  </div>
 </div>
 
 {% endblock %}
