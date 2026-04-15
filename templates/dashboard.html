@@ -17,7 +17,7 @@
   <div class="col-md-4 mb-3">
     <div class="card h-100 anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
       <div class="card-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.65rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
           <h6 style="margin:0;">{{ col.name }}</h6>
           <span class="badge">{{ col.type }}</span>
         </div>
@@ -43,11 +43,11 @@
   <div class="col-md-6 mb-3">
     <div class="card">
       <div class="card-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
           <h6 style="margin:0;">{{ s.suggested_chart | upper }}</h6>
           <span class="badge">{{ s.type }}</span>
         </div>
-        <p class="mb-2" style="font-size:0.8rem;"><strong>Cols:</strong>
+        <p class="mb-2" style="font-size:0.82rem;"><strong>Cols:</strong>
           {% if s.x %}{{ s.x }}{% endif %}{% if s.y %} · {{ s.y }}{% endif %}
         </p>
         <p class="small text-muted mb-3">{{ s.reason }}</p>
@@ -64,7 +64,7 @@
   {% for c in charts %}
   <div class="col-md-6 mb-3">
     <div class="card"><div class="card-body">
-      <h6 style="margin-bottom:0.7rem;">{{ c.title }}</h6>
+      <h6 style="margin-bottom:8px;">{{ c.title }}</h6>
       <div class="chart-preview">{{ c.div | safe }}</div>
     </div></div>
   </div>
@@ -72,9 +72,9 @@
 </div>
 {% endif %}
 
-<div class="mt-4" style="display:flex;gap:0.75rem;flex-wrap:wrap;">
+<div class="mt-4" style="display:flex;gap:10px;flex-wrap:wrap;">
   <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">Deep Analysis →</a>
-  <a class="btn btn-ghost" href="{{ url_for('charts', filename=filename) }}">Charts &amp; Recommendations</a>
+  <a class="btn btn-ghost" href="{{ url_for('charts', filename=filename) }}">Charts & Recommendations</a>
 </div>
 
 {% endblock %}

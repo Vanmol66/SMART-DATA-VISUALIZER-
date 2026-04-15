@@ -2,138 +2,62 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Login</title>
-
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  background: linear-gradient(135deg, #c2b6ff, #f3c6ff, #b6d0ff);
-}
-
-/* Glass Card */
-.login-card {
-  width: 360px;
-  padding: 35px;
-  border-radius: 20px;
-
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(15px);
-
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-  text-align: center;
-}
-
-/* Icon */
-.icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 15px;
-
-  border-radius: 12px;
-  background: linear-gradient(135deg, #6a5cff, #8b7cff);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  color: white;
-}
-
-/* Title */
-h2 {
-  color: #5b4bff;
-  margin-bottom: 5px;
-}
-
-p {
-  color: #555;
-  font-size: 14px;
-  margin-bottom: 25px;
-}
-
-/* Buttons */
-.btn {
-  width: 100%;
-  padding: 12px;
-  margin-top: 12px;
-  border: none;
-  border-radius: 10px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-/* Google */
-.google-btn {
-  background: white;
-  color: #333;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  border: 1px solid #ddd;
-}
-
-.google-btn:hover {
-  background: #f5f5f5;
-}
-
-/* Guest */
-.guest-btn {
-  background: linear-gradient(135deg, #6a5cff, #8b7cff);
-  color: white;
-}
-
-.guest-btn:hover {
-  opacity: 0.9;
-}
-
-/* Footer */
-.footer {
-  margin-top: 20px;
-  font-size: 12px;
-  color: #666;
-}
-</style>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — DataForge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
 
-<div class="login-card">
+<div class="login-page">
 
-  <div class="icon">⚡</div>
+  <!-- LEFT — Project Description -->
+  <div class="login-left">
+    <div class="login-left-content">
+      <div class="login-brand-icon">⚡</div>
+      <h1>DataForge</h1>
+      <p>Your AI-powered smart data visualizer. Upload any CSV or Excel file and get instant profiling, intelligent chart recommendations, and beautiful interactive visualizations — in seconds.</p>
 
-  <h2>DataForge</h2>
-  <p>Analyze data smarter & faster</p>
+      <div class="login-features">
+        <div class="login-feature-item">
+          <span>🔍</span> Deep column profiling with statistics
+        </div>
+        <div class="login-feature-item">
+          <span>🤖</span> AI-scored chart recommendations
+        </div>
+        <div class="login-feature-item">
+          <span>📊</span> Interactive Plotly visualizations
+        </div>
+        <div class="login-feature-item">
+          <span>🧹</span> Data quality analysis & DAX insights
+        </div>
+      </div>
+    </div>
+  </div>
 
-  <!-- GOOGLE LOGIN -->
-  <a href="/login/google" style="text-decoration:none;">
-    <button class="btn google-btn">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18">
-      Continue with Google
-    </button>
-  </a>
+  <!-- RIGHT — Login Card -->
+  <div class="login-right">
+    <div class="login-card-standalone">
+      <div class="login-icon">⚡</div>
+      <h2>Welcome Back</h2>
+      <p>Sign in to start analyzing your data</p>
 
-  <!-- GUEST LOGIN -->
-  <a href="/login/guest" style="text-decoration:none;">
-    <button class="btn guest-btn">
-      Continue as Guest
-    </button>
-  </a>
+      <!-- GOOGLE LOGIN -->
+      <a href="/login/google" class="login-btn login-btn-google">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
+        Continue with Google
+      </a>
 
-  <div class="footer">
-    Secure • Fast • No data stored
+      <!-- GUEST LOGIN -->
+      <a href="/login/guest" class="login-btn login-btn-guest">
+        Continue as Guest
+      </a>
+
+      <div class="login-footer">
+        Secure · Fast · No data stored on our servers
+      </div>
+    </div>
   </div>
 
 </div>

@@ -1,74 +1,70 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-aura"></div>
-  <div class="hero-eyebrow">AI-Powered Analytics</div>
-  <h1>Transform data into<br><em>clear decisions</em></h1>
-  <p class="hero-sub">Upload any CSV or XLSX and get instant profiling, smart chart recommendations, and stunning interactive visualizations — in seconds.</p>
-  <div class="hero-cta">
-   <form method="POST" action="/upload" enctype="multipart/form-data" id="heroForm">
-  <label class="btn btn-primary btn-lg" style="cursor:pointer;">
-    📤 Upload & Analyze
-    <input type="file" name="file" accept=".csv,.xlsx"
-           style="display:none;"
-           onchange="document.getElementById('heroForm').submit()">
-  </label>
-</form>
-    <a href="/history" class="btn btn-ghost btn-lg">View History</a>
-  </div>
-</section>
+<!-- Single Hero Card -->
+<div class="hero-card anim">
+  <h2>Welcome to DataForge</h2>
+  <p>Upload any CSV or Excel file and get instant AI-powered profiling, smart chart recommendations, and interactive visualizations — all in seconds.</p>
+  <form method="POST" action="/upload" enctype="multipart/form-data" id="heroForm" style="display:inline;">
+    <label class="btn" style="cursor:pointer;">
+      📤 Upload & Analyze
+      <input type="file" name="file" accept=".csv,.xlsx"
+             style="display:none;"
+             onchange="document.getElementById('heroForm').submit()">
+    </label>
+  </form>
+</div>
 
+<!-- Quick Start Section -->
+<div class="next-steps">
+  <h3>📈 Getting Started</h3>
 
-<!-- FEATURE GRID -->
-<div class="feature-grid">
-  <div class="glass-card anim a1">
-    <div class="card-body p-lg">
-      <div style="font-size:2rem;margin-bottom:0.75rem;">🔍</div>
-      <h5 style="margin-bottom:0.45rem;">Deep Column Profiling</h5>
-      <p>Auto-detects types, computes mean, median, mode, std, and missing values per column.</p>
+  <div class="todo-item">
+    <div class="todo-icon">📤</div>
+    <div class="todo-content">
+      <h6>Upload your dataset</h6>
+      <p>Drag & drop or click to select a CSV or XLSX file. No configuration needed.</p>
     </div>
   </div>
-  <div class="glass-card anim a2">
-    <div class="card-body p-lg">
-      <div style="font-size:2rem;margin-bottom:0.75rem;">🤖</div>
-      <h5 style="margin-bottom:0.45rem;">AI Chart Recommendations</h5>
+
+  <div class="todo-item">
+    <div class="todo-icon">🔍</div>
+    <div class="todo-content">
+      <h6>Get instant profiling</h6>
+      <p>Auto-detects column types, computes mean, median, mode, std dev, and identifies missing values.</p>
+    </div>
+  </div>
+
+  <div class="todo-item">
+    <div class="todo-icon">🤖</div>
+    <div class="todo-content">
+      <h6>AI chart recommendations</h6>
       <p>Scored, ranked suggestions for the best chart type — with reasoning for every pick.</p>
     </div>
   </div>
-  <div class="glass-card anim a3">
-    <div class="card-body p-lg">
-      <div style="font-size:2rem;margin-bottom:0.75rem;">🎨</div>
-      <h5 style="margin-bottom:0.45rem;">5 Live Themes</h5>
-      <p>Switch between Void, Aurora, Forest, Inferno, and Polar. Preference saved locally.</p>
+
+  <div class="todo-item">
+    <div class="todo-icon">📊</div>
+    <div class="todo-content">
+      <h6>Explore interactive charts</h6>
+      <p>Bar, Pie, Line, Scatter, Histogram, Box, and Heatmap — all rendered with Plotly.</p>
     </div>
   </div>
-  <div class="glass-card anim a4">
-    <div class="card-body p-lg">
-      <div style="font-size:2rem;margin-bottom:0.75rem;">⚡</div>
-      <h5 style="margin-bottom:0.45rem;">Instant Results</h5>
-      <p>No config, no waiting. Drag, drop, and explore interactive charts immediately.</p>
+
+  {% if session.get('user_id') %}
+  <div class="todo-item">
+    <div class="todo-icon">🕒</div>
+    <div class="todo-content">
+      <h6>View your analysis history</h6>
+      <p>See all previously analyzed datasets and revisit your charts anytime.</p>
     </div>
   </div>
+  {% endif %}
 </div>
 
-<div style="text-align:center;margin-top:3.5rem;color:var(--t3);font-size:0.78rem;letter-spacing:0.04em;">
+<div style="text-align:center;margin-top:36px;color:var(--text-tertiary);font-size:0.88rem;font-weight:500;">
   Supports &nbsp;<span class="badge">CSV</span>&nbsp;<span class="badge">XLSX</span>&nbsp;
   — No account needed to explore
 </div>
-
-<script>
-document.querySelector('input[type="file"]').addEventListener('change', function() {
-  const form = document.getElementById('heroForm');
-  const dt = new DataTransfer();
-  dt.items.add(this.files[0]);
-  const input = document.createElement('input');
-  input.type = 'file'; input.name = 'file'; input.style.display = 'none';
-  input.files = dt.files;
-  form.appendChild(input);
-  form.submit();
-});
-</script>
 
 {% endblock %}

@@ -4,135 +4,153 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DataForge — Smart Visualizer</title>
+  <meta name="description" content="Upload CSV/XLSX datasets and get instant profiling, smart chart recommendations, and interactive visualizations.">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
   <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 
-<body class="theme-void">
+<body>
 
-<!-- ══════════ NAVBAR ══════════ -->
-<nav class="navbar">
-  <a href="/home" class="nav-brand">
-    <div class="nav-logo">⚡</div>
-    <span class="nav-wordmark">DataForge</span>
+<!-- ══════════ SIDEBAR ══════════ -->
+<aside class="sidebar" id="sidebar">
+  <a href="/home" class="sidebar-brand">
+    <div class="sidebar-logo">⚡</div>
+    <span class="sidebar-wordmark">DataForge</span>
   </a>
 
-  <!-- CENTER NAV -->
-  <div class="nav-center">
-    <a href="/home">Home</a>
-
-    {% if session.get('user_id') %}
-      <a href="/profile">Profile</a>
-      <a href="/history">History</a>
-    {% endif %}
+  <div class="sidebar-create">
+    <a href="/upload" class="btn-create">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Upload Dataset
+    </a>
   </div>
 
-  <!-- RIGHT SIDE -->
-  <div class="nav-right">
+  <nav class="sidebar-nav">
+    <a href="/home" id="nav-home">
+      <span class="nav-icon">🏠</span> Home
+    </a>
 
-    <!-- THEME PICKER -->
-    <div class="theme-picker" title="Switch theme">
-      <button class="t-dot on" data-t="theme-void"></button>
-      <button class="t-dot" data-t="theme-aurora"></button>
-      <button class="t-dot" data-t="theme-forest"></button>
-      <button class="t-dot" data-t="theme-inferno"></button>
-      <button class="t-dot" data-t="theme-polar"></button>
-    </div>
-
-    <!-- USER vs GUEST -->
     {% if session.get('user_id') %}
-      <!-- Logged User -->
+    <a href="/profile" id="nav-profile">
+      <span class="nav-icon">👤</span> Profile
+    </a>
+    <a href="/history" id="nav-history">
+      <span class="nav-icon">🕒</span> History
+    </a>
+    {% endif %}
+
+    <a href="/upload" id="nav-upload">
+      <span class="nav-icon">📤</span> Upload
+    </a>
+
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-section">Your Datasets</div>
+    {% if session.get('user_id') or session.get('guest_id') %}
+      <!-- datasets populated dynamically -->
+      <a href="/history" class="sidebar-dataset-item">
+        <span class="ds-icon">📂</span> View all datasets
+      </a>
+    {% else %}
+      <a href="/upload" class="sidebar-dataset-item">
+        <span class="ds-icon">📂</span> Upload to get started
+      </a>
+    {% endif %}
+  </nav>
+
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer">
+    {% if session.get('user_id') %}
+      <a href="/profile" class="sidebar-user">
+        <img src="{{ url_for('static', filename='avatars/avatar1.avif') }}"
+             class="sidebar-user-avatar" alt="Profile"
+             onerror="this.style.display='none'">
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Your Account</div>
+          <div class="sidebar-user-role">Logged In</div>
+        </div>
+      </a>
+      <a href="/logout" class="btn btn-ghost btn-sm btn-w" style="margin-top:10px;">Sign out</a>
+    {% elif session.get('guest_id') %}
+      <div style="padding:6px 0;">
+        <span class="guest-badge-sidebar">⚠ Guest Mode</span>
+      </div>
+      <a href="/logout" class="btn btn-ghost btn-sm btn-w" style="margin-top:10px;">Exit</a>
+    {% endif %}
+  </div>
+</aside>
+
+<!-- ══════════ SIDEBAR OVERLAY (Mobile) ══════════ -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ══════════ TOP HEADER ══════════ -->
+<header class="top-header">
+  <button class="header-hamburger" id="menuToggle" aria-label="Toggle menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
+
+  <div class="header-title">DataForge — Smart Data Visualizer</div>
+
+  <div class="header-right">
+    {% if session.get('user_id') %}
       <a href="/profile">
         <img src="{{ url_for('static', filename='avatars/avatar1.avif') }}"
-             class="nav-avatar-img" alt="Profile"
+             class="header-avatar" alt="Profile"
              onerror="this.style.display='none'">
       </a>
-
-      <a href="/logout" class="btn-nav">Sign out</a>
-
     {% elif session.get('guest_id') %}
-      <!-- Guest Mode -->
-      <span class="guest-badge">Guest Mode</span>
-      <a href="/logout" class="btn-nav">Exit</a>
+      <a href="/logout" class="header-user-btn">Guest · Exit</a>
     {% endif %}
-
-    <!-- MOBILE HAMBURGER -->
-    <button class="hamburger" id="ham">
-      <span></span><span></span><span></span>
-    </button>
-
   </div>
-</nav>
-
-<!-- ══════════ MOBILE DRAWER ══════════ -->
-<div class="nav-drawer" id="drawer">
-  <a href="/home">🏠 Home</a>
-
-  {% if session.get('user_id') %}
-    <a href="/profile">👤 Profile</a>
-    <a href="/history">🕒 History</a>
-  {% endif %}
-
-  <a href="/logout">🚪 Logout</a>
-</div>
+</header>
 
 <!-- ══════════ GUEST WARNING BANNER ══════════ -->
 {% if session.get('guest_id') %}
-<div class="guest-banner">
+<div class="guest-banner" style="margin-left:var(--sidebar-w);">
   ⚠️ You are using Guest Mode — history will NOT be saved
 </div>
 {% endif %}
 
-<!-- ══════════ CONTENT ══════════ -->
-<div class="page">
+<!-- ══════════ MAIN CONTENT ══════════ -->
+<main class="main-content">
   <div class="container">
     {% block content %}{% endblock %}
   </div>
-</div>
+</main>
 
 <!-- ══════════ JS ══════════ -->
 <script>
-// ── Theme system ──
-const T_KEY = 'df_theme';
-const saved = localStorage.getItem(T_KEY) || 'theme-void';
-document.body.className = saved;
+// Mobile sidebar toggle
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+const menuBtn = document.getElementById('menuToggle');
 
-document.querySelectorAll('.t-dot').forEach(btn => {
-  btn.classList.toggle('on', btn.dataset.t === saved);
-
-  btn.addEventListener('click', () => {
-    document.body.className = btn.dataset.t;
-    localStorage.setItem(T_KEY, btn.dataset.t);
-
-    document.querySelectorAll('.t-dot').forEach(x => x.classList.remove('on'));
-    btn.classList.add('on');
+if (menuBtn) {
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
   });
-});
+}
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    sidebar.classList.remove('open');
+    overlay.classList.remove('open');
+  });
+}
 
-// ── Mobile menu ──
-const ham = document.getElementById('ham');
-const drawer = document.getElementById('drawer');
-
-ham.onclick = () => {
-  ham.classList.toggle('open');
-  drawer.classList.toggle('open');
-};
-
-document.addEventListener('click', e => {
-  if (!ham.contains(e.target) && !drawer.contains(e.target)) {
-    ham.classList.remove('open');
-    drawer.classList.remove('open');
-  }
-});
-
-// ── Active link highlight ──
+// Active link highlight
 const path = window.location.pathname;
-
-document.querySelectorAll('.nav-center a').forEach(a => {
-  if (path.startsWith(a.getAttribute('href'))) {
+document.querySelectorAll('.sidebar-nav a[id]').forEach(a => {
+  const href = a.getAttribute('href');
+  if (href && path === href) {
+    a.classList.add('active');
+  } else if (href && href !== '/' && path.startsWith(href) && href.length > 1) {
     a.classList.add('active');
   }
 });

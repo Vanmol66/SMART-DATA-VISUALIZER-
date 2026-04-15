@@ -2,13 +2,13 @@
 {% block content %}
 
 <div class="profile-shell">
-  <div class="glass-card" style="border-radius:var(--r-xl);">
+  <div class="card" style="border-radius:var(--r-xl);overflow:hidden;">
 
     <div class="profile-top">
       <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" class="avatar" alt="{{ user.name }}">
       <h3>{{ user.name }}</h3>
       <p>{{ user.email }}</p>
-      <a href="/edit-avatar" class="btn btn-ghost btn-sm" style="margin-top:1rem;">Change Avatar</a>
+      <a href="/edit-avatar" class="btn btn-ghost btn-sm" style="margin-top:12px;">Change Avatar</a>
     </div>
 
     <div class="profile-body">
@@ -21,14 +21,14 @@
             <h6>{{ item.filename }}</h6>
             <p>{{ item.chart_type }}</p>
           </div>
-          <a href="{{ url_for('analysis', filename=item.filename) }}">Open →</a>
+          <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn-outline-primary btn-sm">Open →</a>
         </div>
         {% endfor %}
       {% else %}
-        <div style="text-align:center;padding:2.5rem 1rem;">
-          <div style="font-size:2.5rem;margin-bottom:0.65rem;">📂</div>
-          <h5 style="margin-bottom:0.4rem;">No datasets yet</h5>
-          <p style="margin-bottom:1.25rem;">Upload your first file to get started.</p>
+        <div style="text-align:center;padding:32px 16px;">
+          <div style="font-size:2.5rem;margin-bottom:8px;">📂</div>
+          <h5 style="margin-bottom:6px;">No datasets yet</h5>
+          <p style="margin-bottom:16px;">Upload your first file to get started.</p>
           <a href="/upload" class="btn btn-primary btn-sm">Upload Dataset</a>
         </div>
       {% endif %}
