@@ -6,3 +6,7 @@ client_secret.json
 
 # LLM configs
 ollama_client.py
+
+__pycache__/
+*.pyc
+.env
