@@ -2,64 +2,56 @@
 {% block content %}
 
 <div class="page-header">
-  <div class="breadcrumb">
-    <a href="/home">Home</a><span>›</span><span>Data Quality</span>
-  </div>
-  <h2>🧹 Data Quality & DAX Insights</h2>
+  <div class="breadcrumb"><a href="/home">Home</a><span>›</span><span>Data Quality</span></div>
+  <h2>🧹 Data Quality &amp; DAX Insights</h2>
   <p>{{ filename }}</p>
 </div>
 
 <!-- CLEANING SCORE -->
-<div class="card anim" style="margin-bottom:16px;">
+<div class="card anim mb-4">
   <div class="card-body p-lg">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div class="card-row-between mb-3">
       <h4>Cleanliness Score: {{ cleaning.score }}%</h4>
       <span class="badge">{{ cleaning.category }}</span>
     </div>
-    <div class="progress">
-      <div class="progress-bar" style="width:{{ cleaning.score }}%"></div>
-    </div>
+    <div class="progress"><div class="progress-bar" style="width:{{ cleaning.score }}%"></div></div>
   </div>
 </div>
 
 <!-- ISSUES -->
-<div class="card anim a1" style="margin-bottom:16px;">
+<div class="card anim a1 mb-4">
   <div class="card-body p-lg">
-    <h5 style="margin-bottom:10px;">Issues</h5>
-    <ul style="padding-left:20px;margin:0 0 16px;">
+    <h5 class="card-section-title">Issues</h5>
+    <ul class="issue-list">
       {% for i in cleaning.issues %}
-      <li style="font-size:0.82rem;color:var(--text-secondary);padding:3px 0;">{{ i }}</li>
+      <li>{{ i }}</li>
       {% endfor %}
     </ul>
-
-    <h5 style="margin-bottom:8px;">Column Issues</h5>
-    <ul style="padding-left:20px;margin:0;">
+    <h5 class="card-section-title mt-4">Column Issues</h5>
+    <ul class="issue-list">
       {% for c in cleaning.column_issues %}
-      <li style="font-size:0.82rem;color:var(--text-secondary);padding:3px 0;">{{ c }}</li>
+      <li>{{ c }}</li>
       {% endfor %}
     </ul>
   </div>
 </div>
 
 <!-- DAX -->
-<div class="card anim a2" style="margin-bottom:16px;">
+<div class="card anim a2 mb-4">
   <div class="card-body p-lg">
-    <h4 style="margin-bottom:12px;">⚡ DAX Recommendations</h4>
+    <h4 class="card-section-title">⚡ DAX Recommendations</h4>
     {% for d in dax %}
-    <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border-light);">
-      <h6 style="margin-bottom:4px;">{{ d.title }}</h6>
+    <div class="dax-item">
+      <h6>{{ d.title }}</h6>
       <code>{{ d.formula }}</code>
-      <p style="margin-top:6px;font-size:0.8rem;">{{ d.use }}</p>
+      <p>{{ d.use }}</p>
     </div>
     {% endfor %}
   </div>
 </div>
 
-<!-- NAVIGATION -->
-<div style="margin-top:20px;">
-  <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">
-    → Go to Analysis
-  </a>
+<div class="page-bottom-actions">
+  <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">→ Go to Analysis</a>
 </div>
 
 {% endblock %}

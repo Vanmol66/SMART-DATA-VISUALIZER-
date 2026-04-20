@@ -1,13 +1,53 @@
 {% extends "ai_mode/base.html" %}
-
 {% block content %}
-<h1>AI Mode Dashboard</h1>
 
-<p>Welcome to AI-powered analytics</p>
+<div style="text-align:center;padding:48px 0 32px;">
+  <div style="font-size:3rem;margin-bottom:16px;">🤖</div>
+  <h1 style="margin-bottom:8px;">AI Analytics Hub</h1>
+  <p style="color:#94a3b8;font-size:1.05rem;max-width:500px;margin:0 auto 40px;">Explore your dataset with AI-powered insights, interactive chat, and automated reports.</p>
+</div>
 
-<ul>
-    <li>View Insights</li>
-    <li>Chat with Dataset</li>
-    <li>Generate Reports</li>
-</ul>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;">
+
+  <div class="ai-card">
+    <div style="font-size:2rem;margin-bottom:12px;">📊</div>
+    <h5>Dashboard</h5>
+    <p style="margin-bottom:16px;">Interactive Streamlit dashboard with real-time visualizations of your dataset.</p>
+    <a href="http://localhost:8501" target="_blank" class="ai-btn-primary" style="width:100%;justify-content:center;">Open Dashboard →</a>
+  </div>
+
+  <div class="ai-card">
+    <div style="font-size:2rem;margin-bottom:12px;">🔍</div>
+    <h5>AI Insights</h5>
+    <p style="margin-bottom:16px;">Get AI-generated analysis with key patterns, trends, and anomalies in your data.</p>
+    <a href="/ai/insights" class="ai-btn-primary" style="width:100%;justify-content:center;">View Insights →</a>
+  </div>
+
+  <div class="ai-card">
+    <div style="font-size:2rem;margin-bottom:12px;">💬</div>
+    <h5>Chat with Data</h5>
+    <p style="margin-bottom:16px;">Ask natural language questions about your dataset and get intelligent answers.</p>
+    <a href="/ai/chat" class="ai-btn-primary" style="width:100%;justify-content:center;">Start Chat →</a>
+  </div>
+
+  <div class="ai-card">
+    <div style="font-size:2rem;margin-bottom:12px;">📄</div>
+    <h5>Generate Report</h5>
+    <p style="margin-bottom:16px;">Create a comprehensive PDF report with all insights, charts, and recommendations.</p>
+    <a href="/ai/report" class="ai-btn-primary" style="width:100%;justify-content:center;">Generate Report →</a>
+  </div>
+
+</div>
+
+<div class="ai-sec" style="margin-top:48px;">Current Dataset</div>
+<div class="ai-card" style="display:flex;align-items:center;justify-content:space-between;">
+  <div>
+    <h6 style="margin-bottom:4px;">{{ session.get('current_file', 'No dataset loaded') }}</h6>
+    <p style="margin:0;font-size:0.85rem;">Loaded and ready for AI analysis</p>
+  </div>
+  {% if session.get('current_file') %}
+  <a href="{{ url_for('analysis', filename=session.get('current_file')) }}" class="ai-btn-ghost">View Analysis</a>
+  {% endif %}
+</div>
+
 {% endblock %}

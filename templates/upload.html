@@ -2,120 +2,80 @@
 {% block content %}
 
 <div class="page-header">
-  <div class="breadcrumb">
-    <a href="/home">Home</a><span>›</span><span>Upload</span>
-  </div>
+  <div class="breadcrumb"><a href="/home">Home</a><span>›</span><span>Upload</span></div>
   <h2>Upload Dataset</h2>
-  <p>Drag & drop or click to select a CSV or XLSX file</p>
+  <p>Drag &amp; drop or click to select a CSV or XLSX file</p>
 </div>
 
-<div style="max-width:660px;margin:0 auto;">
+<div class="upload-page-grid">
 
-  <!-- FORM -->
-  <form method="POST" action="/upload" enctype="multipart/form-data" id="upForm">
-
-    <div class="upload-zone" id="dropZone">
-      <span class="upload-icon">📁</span>
-      <h4>Drop your file here</h4>
-      <p>Supports CSV & Excel (.xlsx)</p>
-
-      <input type="file" id="fileInput" name="file" accept=".csv,.xlsx" required style="display:none;">
-
-      <div id="fileLbl" style="cursor:pointer; color:var(--primary); font-weight:500; margin-top:12px;">
-        Click to select file
+  <!-- LEFT: Upload Zone -->
+  <div class="upload-main">
+    <form method="POST" action="/upload" enctype="multipart/form-data" id="upForm">
+      <div class="upload-zone" id="dropZone">
+        <div class="upload-icon-wrap">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        </div>
+        <h4>Drop your file here</h4>
+        <p>Supports CSV &amp; Excel (.xlsx)</p>
+        <input type="file" id="fileInput" name="file" accept=".csv,.xlsx" required style="display:none;">
+        <div id="fileLbl" class="upload-select-label">Click to select file</div>
+        <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled style="margin-top:16px;">Analyze →</button>
       </div>
-
-      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" disabled style="margin-top:16px;">
-        Analyze →
-      </button>
-    </div>
-
-  </form>
-
-  <hr>
-
-  <!-- SAMPLE -->
-  <div class="card anim" style="margin-bottom:12px;">
-    <div class="card-body p-lg">
-      <h5 style="margin-bottom:8px;">📦 Sample Dataset</h5>
-      <p style="margin-bottom:12px;">No data handy? Try our sample sales CSV.</p>
-      <a href="{{ url_for('uploaded_file', filename='sample_sales.csv') }}" class="btn btn-muted btn-sm">
-        ⬇ Download sample_sales.csv
-      </a>
-    </div>
+    </form>
   </div>
 
-  <!-- INFO -->
-  <div class="card anim a2">
-    <div class="card-body p-lg">
-      <h5 style="margin-bottom:12px;">ℹ️ What happens next?</h5>
-      <div class="data-row"><span class="lbl">Column profiling</span><span class="val ok">✓ Automatic</span></div>
-      <div class="data-row"><span class="lbl">Statistical summary</span><span class="val ok">✓ Automatic</span></div>
-      <div class="data-row"><span class="lbl">Chart recommendations</span><span class="val ok">✓ AI-scored</span></div>
-      <div class="data-row"><span class="lbl">Correlation matrix</span><span class="val ok">✓ Automatic</span></div>
+  <!-- RIGHT: Info Cards -->
+  <div class="upload-sidebar-info">
+    <div class="card anim mb-3">
+      <div class="card-body p-lg">
+        <h5 class="card-section-title">📦 Sample Dataset</h5>
+        <p>No data handy? Try our sample sales CSV.</p>
+        <a href="{{ url_for('uploaded_file', filename='sample_sales.csv') }}" class="btn btn-ghost btn-sm">⬇ Download sample_sales.csv</a>
+      </div>
+    </div>
+    <div class="card anim a2">
+      <div class="card-body p-lg">
+        <h5 class="card-section-title">ℹ️ What happens next?</h5>
+        <div class="data-row"><span class="lbl">Column profiling</span><span class="val ok">✓ Automatic</span></div>
+        <div class="data-row"><span class="lbl">Statistical summary</span><span class="val ok">✓ Automatic</span></div>
+        <div class="data-row"><span class="lbl">Chart recommendations</span><span class="val ok">✓ AI-scored</span></div>
+        <div class="data-row"><span class="lbl">Correlation matrix</span><span class="val ok">✓ Automatic</span></div>
+        <div class="data-row"><span class="lbl">Data quality check</span><span class="val ok">✓ Automatic</span></div>
+        <div class="data-row"><span class="lbl">DAX formulas</span><span class="val ok">✓ Generated</span></div>
+      </div>
     </div>
   </div>
 
 </div>
 
 <script>
-// File select
 document.getElementById("fileLbl").addEventListener("click", function() {
   document.getElementById("fileInput").click();
 });
-
 document.getElementById("fileInput").addEventListener("change", function() {
   const f = this.files[0];
   if (f) {
-    document.getElementById("fileLbl").textContent =
-      "✓ " + f.name + " (" + (f.size/1024).toFixed(1) + " KB)";
+    document.getElementById("fileLbl").textContent = "✓ " + f.name + " (" + (f.size/1024).toFixed(1) + " KB)";
     document.getElementById("fileLbl").style.color = "var(--success)";
     document.getElementById("submitBtn").disabled = false;
   }
 });
-
-// Drag & Drop
 const zone = document.getElementById("dropZone");
-
-zone.addEventListener("dragover", e => {
-  e.preventDefault();
-  zone.style.borderColor = "var(--primary)";
-  zone.style.background = "var(--primary-light)";
-});
-
-zone.addEventListener("dragleave", () => {
-  zone.style.borderColor = "";
-  zone.style.background = "";
-});
-
+zone.addEventListener("dragover", e => { e.preventDefault(); zone.style.borderColor = "var(--primary)"; zone.style.background = "var(--primary-light)"; });
+zone.addEventListener("dragleave", () => { zone.style.borderColor = ""; zone.style.background = ""; });
 zone.addEventListener("drop", e => {
-  e.preventDefault();
-  zone.style.borderColor = "";
-  zone.style.background = "";
-
+  e.preventDefault(); zone.style.borderColor = ""; zone.style.background = "";
   const file = e.dataTransfer.files[0];
-  if (file) {
-    const input = document.getElementById("fileInput");
-    const dt = new DataTransfer();
-    dt.items.add(file);
-    input.files = dt.files;
-    input.dispatchEvent(new Event("change"));
-  }
+  if (file) { const input = document.getElementById("fileInput"); const dt = new DataTransfer(); dt.items.add(file); input.files = dt.files; input.dispatchEvent(new Event("change")); }
 });
 </script>
-
 <script>
 document.getElementById("upForm").addEventListener("submit", function(e) {
   const isGuest = "{{ 'guest_id' in session }}";
   if (isGuest === "True") {
-    const confirmUpload = confirm(
-      "⚠️ You are using Guest Mode.\n\n" +
-      "No history of this dataset will be saved.\n\n" +
-      "Do you want to continue?"
-    );
-    if (!confirmUpload) {
-      e.preventDefault();
-    }
+    const confirmUpload = confirm("⚠️ You are using Guest Mode.\n\nNo history of this dataset will be saved.\n\nDo you want to continue?");
+    if (!confirmUpload) { e.preventDefault(); }
   }
 });
 </script>

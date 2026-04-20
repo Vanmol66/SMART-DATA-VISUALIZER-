@@ -1,70 +1,139 @@
 {% extends "base.html" %}
 {% block content %}
 
-<!-- Single Hero Card -->
+<!-- ═══ HERO BANNER ═══ -->
 <div class="hero-card anim">
-  <h2>Welcome to DataForge</h2>
-  <p>Upload any CSV or Excel file and get instant AI-powered profiling, smart chart recommendations, and interactive visualizations — all in seconds.</p>
-  <form method="POST" action="/upload" enctype="multipart/form-data" id="heroForm" style="display:inline;">
-    <label class="btn" style="cursor:pointer;">
-      📤 Upload & Analyze
-      <input type="file" name="file" accept=".csv,.xlsx"
-             style="display:none;"
-             onchange="document.getElementById('heroForm').submit()">
-    </label>
-  </form>
+  <div class="hero-particles"></div>
+  <div class="hero-inner">
+    <h1>Smart Data Visualizer</h1>
+    <p class="hero-subtitle">Upload any CSV or Excel file and get instant AI-powered profiling, smart chart recommendations, and interactive visualizations — all in seconds.</p>
+    <div class="hero-actions">
+      <form method="POST" action="/upload" enctype="multipart/form-data" id="heroForm" style="display:inline;">
+        <label class="btn btn-hero">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload &amp; Analyze
+          <input type="file" name="file" accept=".csv,.xlsx" style="display:none;" onchange="document.getElementById('heroForm').submit()">
+        </label>
+      </form>
+      {% if session.get('user_id') %}
+      <a href="/history" class="btn btn-ghost-hero">View History</a>
+      {% endif %}
+    </div>
+    <div class="hero-badges">
+      <span class="hero-badge">CSV</span>
+      <span class="hero-badge">XLSX</span>
+      <span class="hero-badge">AI-Powered</span>
+      <span class="hero-badge">No Setup</span>
+    </div>
+  </div>
 </div>
 
-<!-- Quick Start Section -->
-<div class="next-steps">
-  <h3>📈 Getting Started</h3>
-
-  <div class="todo-item">
-    <div class="todo-icon">📤</div>
-    <div class="todo-content">
-      <h6>Upload your dataset</h6>
-      <p>Drag & drop or click to select a CSV or XLSX file. No configuration needed.</p>
+<!-- ═══ STATS ROW ═══ -->
+<div class="stats-row anim a1">
+  <div class="stat-block">
+    <div class="stat-icon">📊</div>
+    <div class="stat-info">
+      <div class="stat-number">7+</div>
+      <div class="stat-label">Chart Types</div>
     </div>
   </div>
-
-  <div class="todo-item">
-    <div class="todo-icon">🔍</div>
-    <div class="todo-content">
-      <h6>Get instant profiling</h6>
-      <p>Auto-detects column types, computes mean, median, mode, std dev, and identifies missing values.</p>
+  <div class="stat-block">
+    <div class="stat-icon">🤖</div>
+    <div class="stat-info">
+      <div class="stat-number">AI</div>
+      <div class="stat-label">Recommendations</div>
     </div>
   </div>
-
-  <div class="todo-item">
-    <div class="todo-icon">🤖</div>
-    <div class="todo-content">
-      <h6>AI chart recommendations</h6>
-      <p>Scored, ranked suggestions for the best chart type — with reasoning for every pick.</p>
+  <div class="stat-block">
+    <div class="stat-icon">⚡</div>
+    <div class="stat-info">
+      <div class="stat-number">Instant</div>
+      <div class="stat-label">Profiling</div>
     </div>
   </div>
-
-  <div class="todo-item">
-    <div class="todo-icon">📊</div>
-    <div class="todo-content">
-      <h6>Explore interactive charts</h6>
-      <p>Bar, Pie, Line, Scatter, Histogram, Box, and Heatmap — all rendered with Plotly.</p>
+  <div class="stat-block">
+    <div class="stat-icon">🔒</div>
+    <div class="stat-info">
+      <div class="stat-number">Secure</div>
+      <div class="stat-label">Local Only</div>
     </div>
   </div>
-
-  {% if session.get('user_id') %}
-  <div class="todo-item">
-    <div class="todo-icon">🕒</div>
-    <div class="todo-content">
-      <h6>View your analysis history</h6>
-      <p>See all previously analyzed datasets and revisit your charts anytime.</p>
-    </div>
-  </div>
-  {% endif %}
 </div>
 
-<div style="text-align:center;margin-top:36px;color:var(--text-tertiary);font-size:0.88rem;font-weight:500;">
-  Supports &nbsp;<span class="badge">CSV</span>&nbsp;<span class="badge">XLSX</span>&nbsp;
-  — No account needed to explore
+<!-- ═══ HOW IT WORKS ═══ -->
+<div class="sec anim a2">How It Works</div>
+<div class="steps-grid">
+  <div class="step-card anim a2">
+    <div class="step-num">01</div>
+    <div class="step-icon-big">📤</div>
+    <h4>Upload Dataset</h4>
+    <p>Drag & drop or click to select a CSV or XLSX file. No configuration needed — just upload and go.</p>
+  </div>
+  <div class="step-card anim a3">
+    <div class="step-num">02</div>
+    <div class="step-icon-big">🔍</div>
+    <h4>Instant Profiling</h4>
+    <p>Auto-detects column types, computes mean, median, mode, std dev, and identifies missing values.</p>
+  </div>
+  <div class="step-card anim a3">
+    <div class="step-num">03</div>
+    <div class="step-icon-big">🤖</div>
+    <h4>AI Recommendations</h4>
+    <p>Scored, ranked suggestions for the best chart type — with reasoning for every pick.</p>
+  </div>
+  <div class="step-card anim a4">
+    <div class="step-num">04</div>
+    <div class="step-icon-big">📊</div>
+    <h4>Interactive Charts</h4>
+    <p>Bar, Pie, Line, Scatter, Histogram, Box, and Heatmap — all rendered with Plotly.</p>
+  </div>
 </div>
+
+<!-- ═══ FEATURES ═══ -->
+<div class="sec anim a3">Platform Features</div>
+<div class="feature-cards-grid">
+  <div class="feature-block anim a3">
+    <div class="fb-icon">🧹</div>
+    <h5>Data Quality</h5>
+    <p>Automated cleanliness scoring, outlier detection, and quality suggestions for your datasets.</p>
+  </div>
+  <div class="feature-block anim a3">
+    <div class="fb-icon">⚡</div>
+    <h5>DAX Insights</h5>
+    <p>Smart DAX formula recommendations based on your data structure for Power BI integration.</p>
+  </div>
+  <div class="feature-block anim a4">
+    <div class="fb-icon">💬</div>
+    <h5>AI Chat Mode</h5>
+    <p>Ask questions about your dataset in natural language and get intelligent answers instantly.</p>
+  </div>
+  <div class="feature-block anim a4">
+    <div class="fb-icon">📄</div>
+    <h5>PDF Reports</h5>
+    <p>Generate comprehensive analysis reports with one click — download and share with your team.</p>
+  </div>
+</div>
+
+{% if session.get('user_id') %}
+<!-- ═══ QUICK ACCESS ═══ -->
+<div class="sec anim a4">Quick Access</div>
+<div class="quick-links anim a4">
+  <a href="/history" class="quick-link-card">
+    <span class="ql-icon">🕒</span>
+    <span class="ql-text">View History</span>
+    <span class="ql-arrow">→</span>
+  </a>
+  <a href="/profile" class="quick-link-card">
+    <span class="ql-icon">👤</span>
+    <span class="ql-text">Your Profile</span>
+    <span class="ql-arrow">→</span>
+  </a>
+  <a href="/upload" class="quick-link-card">
+    <span class="ql-icon">📤</span>
+    <span class="ql-text">Upload New</span>
+    <span class="ql-arrow">→</span>
+  </a>
+</div>
+{% endif %}
 
 {% endblock %}

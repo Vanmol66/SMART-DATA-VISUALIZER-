@@ -2,47 +2,43 @@
 {% block content %}
 
 <div class="page-header">
-  <h2>🧹 Data Quality & Analysis</h2>
+  <h2>🧹 Data Quality &amp; Analysis</h2>
   <p>
     <span class="badge">{{ profile.n_rows }} rows</span>&nbsp;
     <span class="badge">{{ profile.n_cols }} columns</span>&nbsp;
-    <span style="color:var(--text-tertiary);font-size:0.8rem;">— {{ filename }}</span>
+    <span class="text-muted">— {{ filename }}</span>
   </p>
 </div>
 
 <!-- Data Cleanliness -->
-<div class="card anim" style="margin-bottom:16px;">
+<div class="card anim mb-4">
   <div class="card-body p-lg">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div class="card-row-between mb-3">
       <h4>🧹 Data Cleanliness</h4>
       <span class="badge">{{ cleaning.category }}</span>
     </div>
-    <div class="progress" style="margin-bottom:8px;">
-      <div class="progress-bar" style="width:{{ cleaning.score }}%"></div>
-    </div>
-    <p style="font-size:0.8rem;color:var(--text-tertiary);">Score: {{ cleaning.score }}%</p>
+    <div class="progress mb-2"><div class="progress-bar" style="width:{{ cleaning.score }}%"></div></div>
+    <p class="score-explain">Score: {{ cleaning.score }}%</p>
   </div>
 </div>
 
 <!-- Column Issues -->
-<div class="card anim a1" style="margin-bottom:16px;">
+<div class="card anim a1 mb-4">
   <div class="card-body p-lg">
-    <h5 style="margin-bottom:10px;">Column Issues</h5>
-    <ul style="padding-left:20px;margin:0;">
+    <h5 class="card-section-title">Column Issues</h5>
+    <ul class="issue-list">
       {% for c in cleaning.column_issues %}
-      <li style="font-size:0.82rem;color:var(--text-secondary);padding:3px 0;">{{ c }}</li>
+      <li>{{ c }}</li>
       {% endfor %}
     </ul>
-
     {% if cleaning.outliers %}
-    <p style="margin-top:12px;font-size:0.82rem;"><strong>Outliers:</strong> {{ cleaning.outliers }}</p>
+    <p class="mt-3"><strong>Outliers:</strong> {{ cleaning.outliers }}</p>
     {% endif %}
-
     {% if cleaning.suggestions %}
-    <h5 style="margin-top:16px;margin-bottom:8px;">Suggestions</h5>
-    <ul style="padding-left:20px;margin:0;">
+    <h5 class="card-section-title mt-4">Suggestions</h5>
+    <ul class="issue-list">
       {% for s in cleaning.suggestions %}
-      <li style="font-size:0.82rem;color:var(--text-secondary);padding:3px 0;">{{ s }}</li>
+      <li>{{ s }}</li>
       {% endfor %}
     </ul>
     {% endif %}
@@ -50,14 +46,14 @@
 </div>
 
 <!-- DAX Recommendations -->
-<div class="card anim a2" style="margin-bottom:16px;">
+<div class="card anim a2 mb-4">
   <div class="card-body p-lg">
-    <h4 style="margin-bottom:12px;">⚡ DAX Recommendations</h4>
+    <h4 class="card-section-title">⚡ DAX Recommendations</h4>
     {% for d in dax %}
-    <div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border-light);">
-      <h6 style="margin-bottom:4px;">{{ d.title }}</h6>
+    <div class="dax-item">
+      <h6>{{ d.title }}</h6>
       <code>{{ d.formula }}</code>
-      <p style="margin-top:6px;font-size:0.8rem;">{{ d.use }}</p>
+      <p>{{ d.use }}</p>
     </div>
     {% endfor %}
   </div>
@@ -70,8 +66,8 @@
   <div class="col-md-4 mb-3">
     <div class="card h-100 anim" style="animation-delay:{{ loop.index0 * 0.04 }}s">
       <div class="card-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <h6 style="margin:0;">{{ col.name }}</h6>
+        <div class="card-row-between mb-2">
+          <h6>{{ col.name }}</h6>
           <span class="badge">{{ col.type }}</span>
         </div>
         <div class="data-row"><span class="lbl">dtype</span><span class="val mono">{{ col.dtype }}</span></div>
@@ -84,17 +80,17 @@
         <div class="data-row"><span class="lbl">Median</span><span class="val mono">{{ col.median }}</span></div>
         <div class="data-row"><span class="lbl">Std dev</span><span class="val mono">{{ col.std }}</span></div>
         <div class="data-row"><span class="lbl">Mode</span>
-          <span class="val mono">{{ col.mode }}<span style="color:var(--text-tertiary);font-size:0.72rem;"> ({{ col.mode_count }})</span></span>
+          <span class="val mono">{{ col.mode }}<span class="text-muted" style="font-size:0.72rem"> ({{ col.mode_count }})</span></span>
         </div>
         {% else %}
         <div class="data-row"><span class="lbl">Mode</span>
-          <span class="val">{{ col.mode }}<span style="color:var(--text-tertiary);font-size:0.72rem;"> ({{ col.mode_count }})</span></span>
+          <span class="val">{{ col.mode }}<span class="text-muted" style="font-size:0.72rem"> ({{ col.mode_count }})</span></span>
         </div>
         {% endif %}
         {% if col.sample_values %}
-        <div style="margin-top:10px;padding-top:8px;border-top:1px solid var(--border-light);">
-          <span style="font-size:0.68rem;color:var(--text-tertiary);text-transform:uppercase;letter-spacing:0.06em;font-weight:700;">Sample</span>
-          <p style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;word-break:break-word;">{{ col.sample_values | join(', ') }}</p>
+        <div class="sample-block">
+          <span class="sample-label">Sample</span>
+          <p class="sample-values">{{ col.sample_values | join(', ') }}</p>
         </div>
         {% endif %}
       </div>
@@ -125,17 +121,17 @@
 {% endif %}
 
 {% if correlation %}
-<div class="card mt-4" style="border-left:3px solid var(--primary);">
+<div class="card mt-4 correlation-card">
   <div class="card-body">
-    <h5 style="margin-bottom:6px;">📈 Correlation Matrix Available</h5>
-    <p style="margin-bottom:12px;">Numeric columns have been correlated. View a visual heatmap in Charts.</p>
-    <a class="btn-outline-primary btn-sm" href="{{ url_for('charts', filename=filename) }}">View heatmap →</a>
+    <h5>📈 Correlation Matrix Available</h5>
+    <p>Numeric columns have been correlated. View a visual heatmap in Charts.</p>
+    <a class="btn btn-outline btn-sm" href="{{ url_for('charts', filename=filename) }}">View heatmap →</a>
   </div>
 </div>
 {% endif %}
 
-<div class="mt-4" style="display:flex;gap:10px;flex-wrap:wrap;">
-  <a class="btn btn-primary" href="{{ url_for('charts', filename=filename) }}">Charts & Recommendations →</a>
+<div class="page-bottom-actions">
+  <a class="btn btn-primary" href="{{ url_for('charts', filename=filename) }}">Charts &amp; Recommendations →</a>
   <a class="btn btn-ghost" href="{{ url_for('uploaded_file', filename=filename) }}">⬇ Download Dataset</a>
 </div>
 

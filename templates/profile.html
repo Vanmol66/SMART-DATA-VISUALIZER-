@@ -2,8 +2,7 @@
 {% block content %}
 
 <div class="profile-shell">
-  <div class="card" style="border-radius:var(--r-xl);overflow:hidden;">
-
+  <div class="card profile-card">
     <div class="profile-top">
       <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" class="avatar" alt="{{ user.name }}">
       <h3>{{ user.name }}</h3>
@@ -13,7 +12,6 @@
 
     <div class="profile-body">
       <div class="sec">Your Datasets</div>
-
       {% if history %}
         {% for item in history %}
         <div class="history-item">
@@ -21,19 +19,18 @@
             <h6>{{ item.filename }}</h6>
             <p>{{ item.chart_type }}</p>
           </div>
-          <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn-outline-primary btn-sm">Open →</a>
+          <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn btn-outline btn-sm">Open →</a>
         </div>
         {% endfor %}
       {% else %}
-        <div style="text-align:center;padding:32px 16px;">
-          <div style="font-size:2.5rem;margin-bottom:8px;">📂</div>
-          <h5 style="margin-bottom:6px;">No datasets yet</h5>
-          <p style="margin-bottom:16px;">Upload your first file to get started.</p>
+        <div class="empty-state">
+          <div class="empty-icon">📂</div>
+          <h5>No datasets yet</h5>
+          <p>Upload your first file to get started.</p>
           <a href="/upload" class="btn btn-primary btn-sm">Upload Dataset</a>
         </div>
       {% endif %}
     </div>
-
   </div>
 </div>
 

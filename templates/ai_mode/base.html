@@ -2,171 +2,107 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AI Mode</title>
-
+    <title>AI Mode — DataKnights</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <style>
-        body {
-            background: #0b1220;
-            color: #e5e7eb;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-        }
+        body { background: #0a0e1a; color: #e2e8f0; font-family: 'Inter', sans-serif; margin: 0; }
 
-        /* NAVBAR */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 40px;
-            background: #020617;
-            border-bottom: 1px solid #1e293b;
+        /* ── AI NAVBAR ── */
+        .ai-navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 32px; height: 64px;
+            background: linear-gradient(135deg, #0f1629 0%, #131a2e 100%);
+            border-bottom: 1px solid rgba(56,189,248,0.12);
+            position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(20px);
         }
-
-        .logo {
-            font-weight: 600;
-            font-size: 18px;
-            color: #38bdf8;
+        .ai-logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 1.1rem; color: #38bdf8; text-decoration: none; }
+        .ai-logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, #38bdf8, #818cf8); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+        .ai-nav { display: flex; gap: 4px; }
+        .ai-nav a {
+            padding: 8px 18px; color: #94a3b8; text-decoration: none;
+            font-weight: 500; font-size: 0.9rem; border-radius: 8px;
+            transition: all 0.2s;
         }
+        .ai-nav a:hover { color: #e2e8f0; background: rgba(255,255,255,0.05); text-decoration: none; }
+        .ai-nav a.active { color: #38bdf8; background: rgba(56,189,248,0.1); }
+        .ai-exit { color: #f87171; text-decoration: none; font-weight: 600; font-size: 0.88rem; padding: 7px 18px; border: 1px solid rgba(248,113,113,0.3); border-radius: 8px; transition: all 0.2s; }
+        .ai-exit:hover { background: rgba(248,113,113,0.1); text-decoration: none; }
 
-        .nav-links a {
-            margin: 0 12px;
-            color: #94a3b8;
+        /* ── AI CONTAINER ── */
+        .ai-container { max-width: 1100px; margin: 0 auto; padding: 32px 28px 64px; min-height: calc(100vh - 64px); }
+
+        /* ── AI CARDS ── */
+        .ai-card {
+            background: linear-gradient(135deg, rgba(15,23,42,0.9), rgba(20,30,50,0.9));
+            border: 1px solid rgba(56,189,248,0.1); border-radius: 16px;
+            padding: 28px; margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.25s;
+        }
+        .ai-card:hover { border-color: rgba(56,189,248,0.25); box-shadow: 0 4px 24px rgba(56,189,248,0.06); }
+        .ai-card h4, .ai-card h5, .ai-card h6 { color: #e2e8f0; }
+        .ai-card p { color: #94a3b8; }
+
+        /* ── AI BUTTONS ── */
+        .ai-btn-primary {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px; font-family: 'Inter', sans-serif;
+            font-size: 0.92rem; font-weight: 600; color: #0a0e1a;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            border: none; border-radius: 10px; cursor: pointer;
+            transition: all 0.25s; text-decoration: none;
+            box-shadow: 0 2px 12px rgba(56,189,248,0.25);
+        }
+        .ai-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 20px rgba(56,189,248,0.35); text-decoration: none; }
+        .ai-btn-ghost {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 24px; font-family: 'Inter', sans-serif;
+            font-size: 0.92rem; font-weight: 600; color: #94a3b8;
+            background: transparent; border: 1px solid rgba(148,163,184,0.2);
+            border-radius: 10px; cursor: pointer; transition: all 0.25s;
             text-decoration: none;
-            font-weight: 500;
-            transition: 0.2s;
         }
+        .ai-btn-ghost:hover { color: #e2e8f0; border-color: rgba(148,163,184,0.4); background: rgba(255,255,255,0.03); text-decoration: none; }
 
-        .nav-links a:hover {
-            color: #38bdf8;
-        }
+        /* ── AI SECTION HEADER ── */
+        .ai-sec { font-size: 0.78rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 16px; margin-top: 32px; }
 
-        .nav-links a.active {
-            color: #38bdf8;
-            border-bottom: 2px solid #38bdf8;
-            padding-bottom: 4px;
-        }
+        /* ── GLOW ACCENT ── */
+        .ai-glow { position: fixed; top: 0; left: 50%; transform: translateX(-50%); width: 600px; height: 300px; background: radial-gradient(ellipse, rgba(56,189,248,0.06), transparent 70%); pointer-events: none; z-index: 0; }
 
-        .exit-btn {
-            color: #f87171;
-            text-decoration: none;
-            font-weight: 500;
-        }
+        /* ── HEADINGS ── */
+        h1, h2, h3 { color: #f1f5f9; }
+        h1 { font-size: 2rem; font-weight: 800; }
+        h2 { font-size: 1.5rem; font-weight: 700; }
 
-        .exit-btn:hover {
-            color: #ef4444;
-        }
-
-        /* MAIN CONTAINER */
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 30px;
-        }
-
-        /* CARD */
-        .card {
-            background: #0f172a;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 0 1px #1e293b;
-        }
-
-        /* BUTTON */
-        button {
-            background: #38bdf8;
-            border: none;
-            padding: 10px 18px;
-            color: #000;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        button:hover {
-            background: #0ea5e9;
-        }
-
-        /* INPUT */
-        input {
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-        }
-
-        /* PRE / CODE */
-        pre {
-            background: #020617;
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
-
-        /* CHAT COMMON */
-        .chat-container {
-            max-width: 800px;
-            margin: auto;
-        }
-
-        /* LOADING DOTS */
-        .loader {
-            display: flex;
-            gap: 5px;
-        }
-
-        .loader span {
-            width: 8px;
-            height: 8px;
-            background: #38bdf8;
-            border-radius: 50%;
-            animation: bounce 1.2s infinite;
-        }
-
-        .loader span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .loader span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
+        pre { background: #020617; padding: 16px; border-radius: 10px; overflow-x: auto; border: 1px solid #1e293b; }
+        code { color: #38bdf8; background: rgba(56,189,248,0.1); padding: 2px 6px; border-radius: 4px; font-size: 0.88rem; }
     </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar">
+<div class="ai-glow"></div>
 
-    <div class="logo">⚡ AI Analyzer</div>
-
-    <div class="nav-links">
-        <a href="/ai"></a>
+<!-- AI NAVBAR -->
+<nav class="ai-navbar">
+    <a href="/ai" class="ai-logo">
+        <div class="ai-logo-icon">⚡</div>
+        AI Analyzer
+    </a>
+    <div class="ai-nav">
         <a href="http://localhost:8501" target="_blank">Dashboard</a>
         <a href="/ai/insights">Insights</a>
         <a href="/ai/chat">Chat</a>
         <a href="/ai/report">Report</a>
     </div>
-
-    <div>
-       <a href="{{ url_for('charts', filename=session.get('current_file')) }}" style="color:#f87171;">
-    Exit AI Mode
-</a>
-    </div>
-
+    <a href="{{ url_for('charts', filename=session.get('current_file')) }}" class="ai-exit">← Exit AI Mode</a>
 </nav>
 
 <!-- MAIN CONTENT -->
-<div class="container">
+<div class="ai-container" style="position:relative;z-index:1;">
     {% block content %}{% endblock %}
 </div>
 

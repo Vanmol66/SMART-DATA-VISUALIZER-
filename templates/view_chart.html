@@ -10,12 +10,12 @@
   <h2>{{ title }}</h2>
 </div>
 
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;">
+<div class="chart-action-bar">
   <a class="btn btn-ghost btn-sm" href="{{ url_for('charts', filename=filename) }}">← Charts</a>
   <a class="btn btn-ghost btn-sm" href="{{ url_for('analysis', filename=filename) }}">Analysis</a>
 </div>
 
-<div class="card anim">
+<div class="card anim chart-full-card">
   <div class="card-body p-lg">
     <div class="chart-preview">{{ chart_div | safe }}</div>
   </div>

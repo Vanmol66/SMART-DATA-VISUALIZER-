@@ -1,26 +1,18 @@
 {% extends "ai_mode/base.html" %}
-
 {% block content %}
 
-<style>
-.insights-box {
-    width: 80%;
-    margin: auto;
-    margin-top: 30px;
-    background: #0f172a;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #1f2a44;
-}
+<h2 style="margin-bottom:8px;">🔍 AI Insights</h2>
+<p style="color:#64748b;margin-bottom:24px;">AI-generated analysis of your dataset</p>
 
-.insights-box pre {
-    white-space: pre-wrap;
-    line-height: 1.6;
-}
-</style>
+<div class="ai-card" style="max-width:900px;margin:0 auto;">
+  <div class="formatted-response" style="line-height:1.8;color:#cbd5e1;">
+    {{ html_insights | safe }}
+  </div>
+</div>
 
-<div class="insights-box">
-     {{ html_insights | safe }}
+<div style="text-align:center;margin-top:32px;">
+  <a href="/ai/chat" class="ai-btn-primary">💬 Ask Follow-up Questions</a>
+  <a href="/ai/report" class="ai-btn-ghost" style="margin-left:12px;">📄 Generate Report</a>
 </div>
 
 {% endblock %}

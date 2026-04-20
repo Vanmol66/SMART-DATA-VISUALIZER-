@@ -17,8 +17,8 @@
   <div class="col-md-4 mb-3">
     <div class="card h-100 anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
       <div class="card-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <h6 style="margin:0;">{{ col.name }}</h6>
+        <div class="card-row-between mb-2">
+          <h6>{{ col.name }}</h6>
           <span class="badge">{{ col.type }}</span>
         </div>
         <div class="data-row"><span class="lbl">dtype</span><span class="val mono">{{ col.dtype }}</span></div>
@@ -41,17 +41,17 @@
 <div class="row">
   {% for s in profile.suggestions[:12] %}
   <div class="col-md-6 mb-3">
-    <div class="card">
+    <div class="card chart-rec-card">
       <div class="card-body">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <h6 style="margin:0;">{{ s.suggested_chart | upper }}</h6>
+        <div class="chart-rec-header">
+          <h6>{{ s.suggested_chart | upper }}</h6>
           <span class="badge">{{ s.type }}</span>
         </div>
-        <p class="mb-2" style="font-size:0.82rem;"><strong>Cols:</strong>
+        <p class="chart-rec-cols"><strong>Cols:</strong>
           {% if s.x %}{{ s.x }}{% endif %}{% if s.y %} · {{ s.y }}{% endif %}
         </p>
         <p class="small text-muted mb-3">{{ s.reason }}</p>
-        <a class="btn-outline-primary btn-sm" href="{{ url_for('view_chart', filename=filename, chart_type=s.suggested_chart, xcol=s.x, ycol=s.y) }}">View chart →</a>
+        <a class="btn btn-outline btn-sm" href="{{ url_for('view_chart', filename=filename, chart_type=s.suggested_chart, xcol=s.x, ycol=s.y) }}">View chart →</a>
       </div>
     </div>
   </div>
@@ -63,8 +63,8 @@
 <div class="row">
   {% for c in charts %}
   <div class="col-md-6 mb-3">
-    <div class="card"><div class="card-body">
-      <h6 style="margin-bottom:8px;">{{ c.title }}</h6>
+    <div class="card chart-preview-card"><div class="card-body">
+      <h6>{{ c.title }}</h6>
       <div class="chart-preview">{{ c.div | safe }}</div>
     </div></div>
   </div>
@@ -72,9 +72,9 @@
 </div>
 {% endif %}
 
-<div class="mt-4" style="display:flex;gap:10px;flex-wrap:wrap;">
+<div class="page-bottom-actions">
   <a class="btn btn-primary" href="{{ url_for('analysis', filename=filename) }}">Deep Analysis →</a>
-  <a class="btn btn-ghost" href="{{ url_for('charts', filename=filename) }}">Charts & Recommendations</a>
+  <a class="btn btn-ghost" href="{{ url_for('charts', filename=filename) }}">Charts &amp; Recommendations</a>
 </div>
 
 {% endblock %}

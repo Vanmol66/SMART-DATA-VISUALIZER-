@@ -10,23 +10,21 @@
 {% if data %}
 <div class="feature-grid">
   {% for item in data %}
-  <div class="card anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
+  <div class="card history-card anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
     <div class="card-body p-lg">
-      <div style="font-size:1.75rem;margin-bottom:8px;">📊</div>
-      <h6 style="margin-bottom:4px;">{{ item.filename }}</h6>
-      <p style="font-size:0.78rem;color:var(--text-tertiary);margin-bottom:12px;">{{ item.chart_type }}</p>
-      <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn btn-primary btn-sm">
-        Open →
-      </a>
+      <div class="history-card-icon">📊</div>
+      <h6>{{ item.filename }}</h6>
+      <p class="history-card-type">{{ item.chart_type }}</p>
+      <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn btn-primary btn-sm btn-w">Open →</a>
     </div>
   </div>
   {% endfor %}
 </div>
 {% else %}
-<div style="text-align:center;padding:64px 16px;">
-  <div style="font-size:3rem;margin-bottom:12px;">📂</div>
-  <h3 style="margin-bottom:6px;">No history yet</h3>
-  <p style="margin-bottom:20px;">Upload a dataset to start building your history.</p>
+<div class="empty-state-full">
+  <div class="empty-icon">📂</div>
+  <h3>No history yet</h3>
+  <p>Upload a dataset to start building your history.</p>
   <a href="/upload" class="btn btn-primary">Upload Dataset</a>
 </div>
 {% endif %}
