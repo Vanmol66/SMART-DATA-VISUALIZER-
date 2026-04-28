@@ -56,12 +56,23 @@ app.register_blueprint(auth_bp)
 
 # --- Helper ---
 def read_dataset(filename):
-    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
-    session["current_dataset"] = filename
-    if not os.path.exists(filepath):
-        raise FileNotFoundError
+    upload_folder = app.config["UPLOAD_FOLDER"]
 
-    if filename.endswith(".csv"):
+    filepath = os.path.join(upload_folder, filename)
+
+    if not os.path.exists(filepath):
+        # try matching real filename
+        for f in os.listdir(upload_folder):
+            if f.endswith(filename):
+                filepath = os.path.join(upload_folder, f)
+                break
+
+    if not os.path.exists(filepath):
+        return None  # ⚠️ DO NOT CRASH
+
+    session["current_dataset"] = os.path.basename(filepath)
+
+    if filepath.endswith(".csv"):
         return pd.read_csv(filepath)
 
     return pd.read_excel(filepath)
@@ -86,8 +97,19 @@ def upload():
 
     filename = secure_filename(file.filename)
 
-    # SAVE FILE
-    filepath = save_uploaded_file(file, app.config["UPLOAD_FOLDER"], filename)
+    # ❌ REMOVE THIS LINE
+    # filepath = save_uploaded_file(file, ..., filename)
+
+    # ✅ KEEP ONLY THIS
+    filepath = save_uploaded_file(file, app.config["UPLOAD_FOLDER"])
+
+    if not filepath:
+        flash("❌ File is open/locked. Close Excel and try again.", "danger")
+        return redirect(url_for("auth.home"))
+
+    # ✅ SAVE CURRENT DATASET (ABSOLUTE PATH)
+    with open("current_dataset.txt", "w") as f:
+        f.write(filepath)
 
     # ✅ TRY READING FILE (VALIDATION)
     try:
@@ -420,6 +442,44 @@ def ai_chat():
 @app.route("/ai/report")
 def ai_report():
     return render_template("ai_mode/report.html")
+
+@app.route("/history")
+def history():
+    files = []
+
+    upload_folder = app.config["UPLOAD_FOLDER"]
+
+    if os.path.exists(upload_folder):
+        for f in os.listdir(upload_folder):
+            full_path = os.path.join(upload_folder, f)
+
+            if os.path.isfile(full_path):
+                files.append(f)
+
+    return render_template("history.html", files=files)
+
+
+
+@app.route("/delete/<filename>")
+def delete_file(filename):
+    filepath = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
+    if os.path.exists(filepath):
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print("File delete error:", e)
+
+    try:
+        History.query.filter_by(filename=filename).delete()
+        db.session.commit()
+    except Exception as e:
+        print("DB delete error:", e)
+
+    session.pop("current_file", None)
+
+    # 🔥 force reload
+    return redirect(url_for("history") + "?refresh=1")
 
 @app.route("/debug")
 def debug():

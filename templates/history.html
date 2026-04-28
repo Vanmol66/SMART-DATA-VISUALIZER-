@@ -1,32 +1,78 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="page-header">
-  <div class="breadcrumb"><a href="/home">Home</a><span>›</span><span>History</span></div>
-  <h2>Your History</h2>
-  <p>All previously analyzed datasets</p>
-</div>
+<div style="max-width:1000px;margin:auto;padding:20px;">
+  <h2 style="margin-bottom:20px;">📊 Your History</h2>
 
-{% if data %}
-<div class="feature-grid">
-  {% for item in data %}
-  <div class="card history-card anim" style="animation-delay:{{ loop.index0 * 0.05 }}s">
-    <div class="card-body p-lg">
-      <div class="history-card-icon">📊</div>
-      <h6>{{ item.filename }}</h6>
-      <p class="history-card-type">{{ item.chart_type }}</p>
-      <a href="{{ url_for('analysis', filename=item.filename) }}" class="btn btn-primary btn-sm btn-w">Open →</a>
+  {% if data %}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;">
+
+      {% for item in data %}
+      <div style="
+        background:#fff;
+        border-radius:12px;
+        padding:20px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.08);
+        transition:0.3s;
+      "
+      onmouseover="this.style.transform='translateY(-5px)'"
+      onmouseout="this.style.transform='none'"
+      >
+
+        <div style="font-size:40px;">📁</div>
+
+        <h4 style="margin:10px 0;">{{ item.filename }}</h4>
+
+        <div style="display:flex;gap:10px;margin-top:15px;">
+
+          <!-- ✅ ANALYZE BUTTON -->
+          <a href="{{ url_for('analysis', filename=item.filename) }}"
+             style="
+               flex:1;
+               text-align:center;
+               padding:8px;
+               background:#2563eb;
+               color:white;
+               border-radius:8px;
+               text-decoration:none;
+             ">
+             Analyze →
+          </a>
+
+          <!-- ✅ DELETE BUTTON -->
+          <a href="{{ url_for('delete_file', filename=item.filename) }}"
+             onclick="return confirm('Delete this dataset?')"
+             style="
+               flex:1;
+               text-align:center;
+               padding:8px;
+               background:#dc2626;
+               color:white;
+               border-radius:8px;
+               text-decoration:none;
+             ">
+             Delete
+          </a>
+
+        </div>
+
+      </div>
+      {% endfor %}
+
     </div>
-  </div>
-  {% endfor %}
+  {% else %}
+    <div style="text-align:center;margin-top:50px;">
+      <h3>No history yet</h3>
+      <p>Upload dataset to start</p>
+      <a href="/upload" style="
+        padding:10px 20px;
+        background:#2563eb;
+        color:white;
+        border-radius:8px;
+        text-decoration:none;
+      ">Upload Dataset</a>
+    </div>
+  {% endif %}
 </div>
-{% else %}
-<div class="empty-state-full">
-  <div class="empty-icon">📂</div>
-  <h3>No history yet</h3>
-  <p>Upload a dataset to start building your history.</p>
-  <a href="/upload" class="btn btn-primary">Upload Dataset</a>
-</div>
-{% endif %}
 
 {% endblock %}
